@@ -1,0 +1,150 @@
+<div class="contenedor">
+    <div class= "titulo">
+        <b>MIS PROYECTOS</b>
+    </div>
+    <div class="proyectos">
+        <div class="imagen">
+        <img src="https://es-static.z-dn.net/files/d67/9816e2da5cf4b72b0528b46fbb1d2232.png" alt="Imagen quienSoy" class="imagen">
+    </div>
+        <h1>QUIEN SOY</h1>
+    <button class="boton1" onclick="window.location.href='DespliegueQuienSoy/QuienSoy.html';">
+        Ver proyecto
+    </button>
+    </div>
+
+    <div class="proyectos">
+        <div class="imagen">
+        <img src="https://www.elnuevosiglo.com.co/sites/default/files/2020-08/lista-superheroes-min-1024x576.jpg" alt="Imagen superheroes" class="imagen">
+    </div>
+        <h1>SUPERHEROES</h1>
+        <button class="boton1" onclick="window.location.href='DespliegueSuperheroes/superheroes.html';">
+            Ver proyecto
+        </button>
+    </div>
+   
+    <div class="proyectos">
+        <div class="imagen">
+        <img src="https://media.istockphoto.com/id/1386283620/es/vector/reanudar-concepto-de-gesti%C3%B3n-de-recursos-humanos-y-contrataci%C3%B3n-entrevista-de-trabajo.jpg?s=612x612&w=0&k=20&c=6jdCZ6L0ZgBZ_UsVYyz5zNMKDCem50jf9w56G4jYMJw=" alt="Imagen curriculum " class="imagen">
+    </div>
+        <h1>CURRICULUM</h1>
+        <button class="boton1" onclick="window.location.href='curriculum.html';">
+            Ver proyecto
+        </button>
+    </div>
+   
+    <div class="proyectos">
+        <div class="imagen">
+        <img src="https://static.agilitycms.com/partners/integrations/netlify-logo.png" alt="imagen de video" class="imagen">
+    </div>
+        <h1>TUTORIAL-NETLIFY</h1>
+        <button class="boton1" onclick="window.location.href='https://youtu.be/G4mVGc_mRNE?si=OdWHLe7MyckeDrqK';">
+            Ver proyecto
+        </button>
+    </div>
+
+    <div class="proyectos">
+        <div class="imagen">
+        <img src="https://st2.depositphotos.com/1472772/7360/i/450/depositphotos_73609999-stock-illustration-miniature-shoe-store.jpg" alt="Imagen curriculum " class="imagen">
+    </div>
+        <h1>TIENDA ZAPATOS</h1>
+        <button class="boton1" onclick="window.location.href='tiendaZapatos.html';">
+            Ver proyecto
+        </button>
+    </div>    
+    </div>
+
+</body>
+<head>
+<style>
+    *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+    }
+    .contenedor {
+        background-color: rgb(208, 239, 247);
+        text-align: center;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(270px, 1fr)); /* 3 columnas */
+        grid-template-rows: auto auto; /* 2 filas con altura automática */
+        gap: 20px;
+        padding-left: 100px;
+        padding-right: 100px;
+        height: auto;
+        width: 100%;
+        background: url('https://i.pinimg.com/736x/77/3e/46/773e46b4218e658062561aa16b3d19b5.jpg');
+        background-size: cover;
+        
+    }
+
+    .titulo {
+        color: rgb(0, 0, 0);
+        font-size: 50px;
+        grid-column: 1 / 4; /* El título ocupa las 3 columnas */
+        font-weight: bold;
+        text-align: center;
+        margin-top: 80px;
+        text-shadow: 0 0 5px #00c3ff, 0 0 10px #00c3ff, 0 0 20px #ff00ff, 0 0 30px #ff00ff;
+        animation: glow 1.5s infinite alternate;
+    }
+
+        .proyectos{
+            background-color: rgb(255, 255, 255); 
+            padding: 20px;
+            border-radius: 5px;
+            align-items: center; 
+            display: flex; 
+            flex-direction: column;
+            border: 2px solid rgb(129, 126, 126); 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+            height: 390px;
+            width: 350px;
+            background: linear-gradient(white, white) padding-box, 
+           
+
+        }
+        .proyectos:hover {
+            transform: scale(1.05);
+            }
+
+        .imagen img {
+            width: 300px;
+            height: 267px; 
+            object-fit: cover; 
+            margin-top: 5px;
+            border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
+            object-fit: contain;
+           
+        }
+        h1{
+            margin-top: 5px; 
+            color: #000000;
+            font-size: 20px; 
+        }
+
+        .boton1{
+            background-color: rgb(0, 195, 255); 
+            color: rgb(0, 0, 0); 
+            padding: 10px 15px; 
+            font-size: 15px; 
+            border-radius: 5px; 
+            border: 2px solid rgb(107, 140, 233); 
+            margin-bottom: 10px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            margin-top: 10px; 
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0 0 10px rgba(0, 195, 255, 0.5);
+        }
+
+        .boton1:hover {
+            box-shadow: 0 0 15px rgba(0, 195, 255, 0.9);
+        }
+
+    </style>
+</head>
+</html>

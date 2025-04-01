@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class = "fuente">
+     <div class="cuadro1">
+         <p class="nombre">Sayury Rodríguez</p>
+         <span class="inicio">Inicio</span>
+         <span class="dosInicio">¿Quien soy? Proyectos</span>
+     </div>
+     </div>
+     <div class="container">
+        <div class="fila1">
+             <div class="imagen" style="background-image: url('PaginaQuienSoy/señor\ computador.png')">
+             <div class="contenido">
+                <div class = "quienSoy">
+                    <h2>¿Quien soy?</h2>
+                </div>
+                <div class= "textoFila1">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse nisi adipisci provident eius enim id eos fugit odit facere vitae. Sit sequi praesentium, officiis rerum dicta. Deserunt ipsam officia neque!</p>
+                </div>
+             </div>
+        </div>
+        <button class="boton" onclick="alert('¡Botón clickeado!')">Leer más</button>
+        </div>
+
+        <div class="fila2">
+            <div class="imagen2" style="background-image: url('QuienSoy2/imagen2\ QuienS.jpeg')">
+            </div>
+            <div class="textoFila2">
+                <p>Lorem ipsum dolor sit ament, consectetur adipisicing elit. Perferendis odio amet nulla ad nobis minima doloribus inventore, aspernatur distinctio dicta ipsam fugit suscipit ullam architecto eos molestias placeat rerum facere.</p>
+            </div>
+            <div class= "nombreFila2">
+                <p>- Sayury Rodriguez</p>
+            </div>
+        </div>
+
+        <div class="fila3">
+            <div class= "tituloFila3">
+                <b>Mis proyectos</b>
+            </div>
+            <div class="columna">
+                <div class="img1">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXqH3qcBehhF3BYcupmrY6mcA3q8KBTKui7g&s" alt="Imagen Python" class="img1">
+            </div>
+                <h1>Python</h1>
+                <p>Python es un lenguaje de programación de alto nivel, fácil de aprender y con sintaxis clara. Es versátil, soporta múltiples paradigmas y se usa en áreas como desarrollo web, análisis de datos, inteligencia artificial y automatización. Su amplia biblioteca estándar y su gran comunidad de soporte lo hacen popular entre desarrolladores de todos los niveles.</p>
+            <button class="boton1" onclick="alert('¡Botón clickeado!')">Ver proyecto</button>
+            </div>
+        
+            <div class="columna">
+                <div class="img1">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpTElNlfrbYQkhkHYjjlt5ol2o2vswz3J1Iw&s" alt="Imagen Java" class="img1">
+            </div>
+                <h1>Java</h1>
+                <p>Java es un lenguaje de programación orientado a objetos, conocido por su portabilidad y capacidad de ejecutarse en cualquier dispositivo con la máquina virtual de Java (JVM). Se usa en aplicaciones web, móviles y sistemas empresariales, y cuenta con una amplia biblioteca estándar y una comunidad activa.</p>
+            <button class="boton1" onclick="alert('¡Botón clickeado!')">Ver proyecto</button>
+            </div>
+           
+            <div class="columna">
+                <div class="img1">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQZJbhqxNeimCkKbolvoob4pdmMtdfsn8PqA&s" alt="Imagen Java Script " class="img1">
+            </div>
+                <h1>Java Script</h1>
+                <p>JavaScript es un lenguaje de programación utilizado principalmente para el desarrollo web. Permite crear interactividad en las páginas web y se ejecuta en el navegador del usuario. Es fundamental para el desarrollo de aplicaciones web modernas, y se usa junto con HTML y CSS. JavaScript tiene una gran comunidad y numerosas bibliotecas y marcos de trabajo disponibles.</p>
+            <button class="boton1" onclick="alert('¡Botón clickeado!')">Ver proyecto</button>
+            </div>
+           
+            <div class="columna">
+                <div class="img1">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRv5PlR-6YZDHZIW8Axyo7AoQP7tTPyotHhEQ&s" alt="C#" class="img1">
+            </div>
+                <h1>C#</h1>
+                <p>C# es un lenguaje de programación desarrollado por Microsoft, orientado a objetos y utilizado principalmente en el desarrollo de aplicaciones para la plataforma .NET. Se usa en aplicaciones de escritorio, web y móviles, así como en videojuegos a través de Unity. C# es conocido por su sintaxis clara, alto rendimiento y gran integración con herramientas de Microsoft.</p>
+            <button class="boton1" onclick="alert('¡Botón clickeado!')">Ver proyecto</button>
+            </div>
+            </div>
+            <div class="cuadro2">
+                <p>Copyright &copy; 2018.Todos los derechos reservados.</p>
+            </div>
+ </body>
+<head>
+<style>
+    *{
+        font-family: Arial, Helvetica, sans-serif;
+        margin: 0;
+    }
+    .cuadro1 {
+            width:100%;               
+            padding: 1px;              
+            background-color: #2e2d2d;
+            display:flex;
+            align-items: center;
+            justify-content: space-between;
+            white-space: wrap;
+            height: 50px;
+            position: fixed;
+            z-index: 1000;
+            
+        }
+        .nombre {
+            font-size: 15px;
+            color: #ffffff;
+            padding-left:90px;
+        }
+        .inicio{
+            font-size: 15px;
+            color: #ffffff;
+            position: relative;
+            display: flex;
+            left:340px;
+            word-spacing: 10px;
+            justify-content: end;
+
+        }
+        .dosInicio{
+            color: #b8aeae;
+            font-size: 15px;
+            position: relative;
+            display: flex;
+            right:90px;
+            word-spacing: 10px;
+            justify-content: end;
+        }
+        .container {
+            display: grid;
+            grid-template-rows: repeat(3, 1fr); 
+            width: 100%;
+            height: 100vh;
+            padding-top: 60px;
+        }
+        .fila1 {
+            background-color: #ffffff; 
+            text-align: center;
+            padding: 10px;
+        }
+        .imagen{
+			padding:0;
+			box-sizing: border-box;
+			display: flex;
+			height: 320px;
+			align-items: center; 
+			width: 500px;
+            margin-left:100px;
+            margin-bottom: 20px;
+        }
+        .quienSoy{
+            font-size: 35px;
+            color:rgb(255, 51, 0);
+            margin-left: 560px;
+            white-space: nowrap;
+            margin-top: -40px;
+            padding: 20px;
+        }
+        .textoFila1{
+            font-size: 17px;
+            color:rgb(77, 75, 75);
+            margin-left: 460px;
+            text-align:justify;
+            width: 50%;
+            padding-left:120px;
+            margin-bottom: 20px;
+        }
+        .boton{
+            display: inline-block;
+            background-color:rgb(255, 51, 0);
+            color: white; 
+            padding: 8px 15px;
+            font-size: 15px; 
+            border-radius: 5px;
+            position: absolute;
+            top: 300px; 
+            margin-left: 18px;
+        }
+        .fila2 {
+            background-color: rgb(255, 51, 0);
+            text-align: center;
+            padding-left: 372px;
+            padding-right: 372px; 
+        }
+        .imagen2{
+            width: 255px;              
+            height: 255px;             
+            border-radius: 50%;            
+            position: absolute;     
+            left: 40%;                 
+            border: 1px solid #585656; 
+            background-size: contain;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+        }
+        .textoFila2{
+            font-size: 20px;
+            color:rgb(255, 255, 255);
+            width: 100%;
+            margin-top: 290px;
+            text-align:center;
+        }
+        .nombreFila2{
+            color: rgb(255, 255, 255); 
+            padding: 20px;
+            }
+        .fila3{
+            background-color: rgb(255, 255, 255);
+            text-align: center;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(270px, 1fr)) ;
+            gap: 20px;
+            padding-left: 100px; 
+            padding-right: 100px; 
+        }  
+        .tituloFila3{
+            color: rgb(0, 0, 0); 
+            padding: 0px;
+            font-size: 40px;
+            grid-column: span 4;
+        }
+        .columna{
+            background-color: rgb(255, 255, 255); 
+            padding: 20px;
+            border-radius: 5px;
+            align-items: center; 
+            display: flex; 
+            flex-direction: column;
+            border: 2px solid rgb(129, 126, 126); 
+            
+        }
+        .img1{
+            width: 266px;
+            height: 267px; 
+            object-fit: cover; 
+            margin-top: -9.9;
+            border-top-left-radius: 5px;
+			border-top-right-radius: 5px;
+        }
+        h1{
+            margin-top: 20px; 
+            color: #585656;
+            font-size: 20px; 
+            margin-bottom: 20px;
+        }
+        .columna, .p{
+            color: #585656;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        .boton1{
+            background-color: rgb(255, 51, 0); 
+            color: white; 
+            padding: 10px 15px; 
+            font-size: 15px; 
+            border-radius: 5px; 
+            border: 2px solid rgb(255, 0, 0); 
+            margin-bottom: 10px; 
+            margin-left: auto; 
+            margin-right: auto; 
+            margin-top: auto; 
+        }
+        .cuadro2{
+            width:100%;               
+            background-color:#1a1818;
+            display:flex;
+            align-items: center;
+            height: 50px;
+            color: #ffffff;
+            justify-content: end;
+        }
+    </style>
+</head>
+</html>
