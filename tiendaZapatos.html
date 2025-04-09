@@ -66,6 +66,7 @@
                 <div class="texto8">
                     <h1>Hight Price to Low</h1>
                 </div>
+            <div class="lineaCorreo">
                 <div class="iconoCorreo">
                     <i class="fa-solid fa-envelope"></i>
                 </div>
@@ -75,6 +76,7 @@
                 <div class="flecha">
                     <i class="fa-solid fa-arrow-right"></i>
                 </div>
+            </div>
             </div>
         </div>
 
@@ -441,6 +443,11 @@
             padding-left: 150px;
         }
 
+        .lineaCorreo{
+            display: flex;  
+            align-items: center;
+        }
+
         .fila2{
             width: 100%;
         }
@@ -589,7 +596,7 @@
             width: 60%;
             display: grid;
             grid-template-columns: repeat(3, 1fr); 
-            grid-template-columns: repeat(3, minmax(100px, 1fr)) ;
+            /*grid-template-columns: repeat(3, minmax(100px, 1fr)) ;*/
             padding-top: 60px;
             flex-wrap: wrap;
             padding-right: 180px;
@@ -929,9 +936,9 @@
         }
 
         .columna2 {
-            width: 100%; 
+            width: 60%; 
             grid-template-columns: repeat(3, 1fr); 
-            padding-left: 70px;
+            padding-right: 70px;
         }
 
         .tarjetas{
@@ -1030,6 +1037,10 @@
             grid-template-columns: 1fr; 
         }
 
+        .flecha{
+            display: none;
+        }
+
         .columna1 {
         width: 100%;
         display: grid;
@@ -1122,6 +1133,10 @@
 
     @media (max-width: 425px) {
 
+    .cuadro1{
+        gap: 4px;
+    }
+
     .fila1 {
         height: auto;
     }
@@ -1130,6 +1145,9 @@
         height: 200px; /* Reducir la altura de la imagen */
     }
 
+    .buscar{
+        padding-left: 0px;
+    }
     .menu,
     .constructor,
     .texto123,
@@ -1187,120 +1205,241 @@
     .fila3 {
         display: flex;
         flex-direction: column;
+        align-items: center;
+        justify-content: center;
     }
 
     .columna1 {
         width: 100%;
-        padding: 10px;
         display: flex;
         flex-direction: column;
+        align-items: center;
     }
 
     .categorias,
+    .indice,
     .precio,
+    .valores,
     .colores,
-    .tamaño {
-        padding: 10px;
-        margin: 10px 0;
-        text-align: center;
+    .colors,
+    .tamaño,
+    .cuadriculaNum {
+        text-align: center; /* Centra el texto dentro de estos elementos */
+        padding-left: 0; /* Elimina padding izquierdo individual */
+  }
+  
+
+    .categorias{
+        padding-left: 80px;
+        padding-top: 15px;
+    }
+
+    .indice{
+        margin: 0px;
     }
 
     .indice li {
         text-align: center;
-        padding: 5px;
-        margin: 5px 0;
+        padding-left: 40px;
+    }
+
+    .precio{
+        padding-top: 100px;
+        padding-left: 70px;
     }
 
     .valores {
-        grid-template-columns: 1fr; /* Una columna para pantallas pequeñas */
-        text-align: center;
+        grid-template-columns: 3, 1fr; /* Una columna para pantallas pequeñas */
+    }
+
+    .colores{
+        padding-left: 65px;
     }
 
     .colors {
-        grid-template-columns: repeat(4, 1fr); /* Ajustar la cantidad de columnas */
+        grid-template-columns: repeat(6, 1fr); /* Ajustar la cantidad de columnas */
+       
+    }
+
+    .tamaño{
+        padding-top: 30px;
+        padding-left: 55px;
     }
 
     .cuadriculaNum {
-        grid-template-columns: repeat(4, 1fr); /* Ajustar la cantidad de columnas */
+        grid-template-columns: repeat(4 1fr); /* Ajustar la cantidad de columnas */
         grid-template-rows: auto;
+        padding-left: 15px;
     }
 
     .columna2 {
         width: 100%;
         grid-template-columns: 1fr; /* Una columna para pantallas pequeñas */
-        padding: 10px;
+        padding: 30px;
+        justify-items: center; 
     }
 
     .tarjetas {
-        width: 100%;
+        width: 55%;
         margin: 10px 0;
     }
 
-    .imagenZapatos,
-    .imagenZapatos2,
-    .imagenZapatos3,
-    .imagenZapatos4,
-    .imagenZapatos5,
-    .imagenZapatos6,
-    .imagenZapatos7,
-    .imagenZapatos8,
-    .imagenZapatos9 {
-        height: auto;
-        padding: 10px;
-    }
-
-    .contenidoTarjetas {
-        padding: 5px;
-    }
-
-    .titulo,
-    .categoria,
-    .precios {
-        text-align: center;
-        padding: 5px;
-        margin: 0;
-    }
-
-    .iconoCarritoTarjetas {
-        margin: 10px auto;
-        position: static;
+    .iconoCarritoTarjetas{
+        margin-left: 160px;
     }
 
     .fila4 {
         flex-direction: column;
-        padding: 20px;
+        padding: 0px;
     }
 
     .textosF4 {
-        grid-template-columns: 1fr;
-        gap: 10px;
-        margin-left: 0;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+        margin-left: 100px;
+        border: 1px solid #555;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        width: 180px;
     }
 
-    .constructorF4 {
-        padding-left: 0;
-        text-align: center;
-        margin: 10px 0;
+    .textosF4 li {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 5px;
+        padding: 0px;
+        margin: 0px;
+    }
+
+   
+    .constructorF4 h3 {
+       padding-top: 20px;
+       padding-left: 110px;
+    }
+
+    .constructorF4 p {
+       padding-left: 70px;
     }
 
     .ultimoTexto {
+        padding-top: 20px;
         position: static;
-        text-align: center;
         margin: 10px 0;
     }
 
-    .ultimoTexto span:last-child {
-        margin-left: 10px;
+    .ultimoTexto p{
+        padding-left: 75px;
     }
-
     .texto4{
         font-size: 12px;
         margin-top: 20px;
         margin-left: -15px;
     }
+}
 
-    .indice{
-        margin-top: 50px;
+@media (max-width: 375px) {
+    .columna2{
+        padding: 0px;
+    }
+
+    .iconoCarrito,
+    .iconoUsuario{
+        display: none;
+    }
+
+    .texto4{
+        margin-top: 20px;
+        margin-left: -30px;
+    }
+
+    .botonComprarAhora{
+        margin-left: -190px;    
+        padding: 5px 20px;    
+    }
+
+    .columna2 {
+        padding: 30px;
+    }
+
+    .textosF4 {
+        margin-left: 80px;
+        width: 180px;
+    }
+
+    .constructorF4 h3 {
+       padding-top: 20px;
+       padding-left: 85px;
+    }
+
+    .constructorF4 p {
+       padding-left: 55px;
+    }
+
+    .ultimoTexto {
+        position: static;
+        margin: 10px 0;
+    }
+
+    .ultimoTexto p{
+        padding-left: 40px;
+    }
+
+    .ultimoTexto span{
+        padding: 13px;
+        margin: 0px;
+    }
+
+    .ultimoTexto span:last-child {
+            margin-left: 0px;
+        }
+}
+
+@media (max-width: 320px) {
+
+    .texto4{
+        margin-left: -40px;
+    }
+
+    .botonComprarAhora{
+        margin-left: -220px;    
+        padding: 5px 20px;    
+    }
+    
+    .iconoCarritoTarjetas{
+        margin-left: 130px;
+    }
+
+    .textosF4 {
+        margin-left: 55px;
+        width: 170px;
+    }
+
+    .constructorF4 h3 {
+       padding-left: 60px;
+    }
+
+    .constructorF4 p {
+       padding-left: 20px;
+    }
+
+    .ultimoTexto p{
+        padding-left: 10px;
+    }
+
+    .ultimoTexto span{
+        padding: 5px;
+    }
+
+    .cuadro1 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center; 
+    }
+
+    .lupa{
+        display: none;
     }
 }
 
