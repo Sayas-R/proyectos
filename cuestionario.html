@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registro</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #8a3778;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 400px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    input,
+    select {
+      width: calc(100% - 22px);
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+      display: block;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #listaDatos {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 400px;
+    }
+
+    .item {
+      background-color: #f0f0f0;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      position: relative;
+    }
+
+    .item button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background-color: red;
+      border: none;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #mensajeError {
+      color: red;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>REGISTRATE</h1>
+    <div id="mensajeError"></div>
+    <div id="mensajeExito" style="display:none; color: green; font-weight: bold; margin-bottom: 10px;"></div>
+    <input type="text" id="nombres" placeholder="Nombres" />
+    <input type="text" id="apellidos" placeholder="Apellidos" />
+    <input type="number" id="telefono" placeholder="Número de teléfono" />
+    <select id="lista">
+      <option value="">Seleccione tipo de documento</option>
+      <option value="CC">Cédula de Ciudadanía</option>
+      <option value="CE">Tarjeta de Identidad</option>
+    </select>
+    <input type="number" id="documento" placeholder="Número de documento" />
+    <input type="text" id="correo" placeholder="Correo electrónico" />
+    <input type="date" id="nacimiento" placeholder="Fecha de nacimiento" />
+    <button onclick="enviar()">ENVIAR</button>
+  </div>
+
+  <div id="listaDatos"></div>
+
+  <script>
+    let data = [];
+
+    function enviar() {
+      const nombre = document.getElementById("nombres").value.trim();
+      const apellidos = document.getElementById("apellidos").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      const tipoDoc = document.getElementById("lista").value;
+      const documento = document.getElementById("documento").value.trim();
+      const correo = document.getElementById("correo").value.trim();
+      const nacimiento = document.getElementById("nacimiento").value;
+
+      const mensajeError = document.getElementById("mensajeError");
+      mensajeError.textContent = "";
+
+      // Validación
+      if (!nombre || !apellidos || !telefono || !tipoDoc || !documento || !correo || !nacimiento) {
+        mensajeError.textContent = "⚠️ Por favor, complete todos los campos";
+        return;
+      }
+
+      // Guardar datos
+      const datos = { nombre, apellidos, telefono, tipoDoc, documento, correo, nacimiento };
+      data.unshift(datos);
+      console.log("Datos registrados:", datos);
+      pintarLista();
+
+
+        // Mostrar mensaje de éxito
+  const mensajeExito = document.getElementById("mensajeExito");
+  mensajeExito.textContent = "✅ Registro exitos.";
+  mensajeExito.style.display = "block";
+
+      document.getElementById("nombres").value = "";
+    document.getElementById("apellidos").value = "";
+    document.getElementById("telefono").value = "";
+    document.getElementById("lista").value = "";
+    document.getElementById("documento").value = "";
+    document.getElementById("correo").value = "";
+    document.getElementById("nacimiento").value = "";
+    }
+
+    function pintarLista() {
+      const lista = document.getElementById("listaDatos");
+      lista.innerHTML = "";
+
+      data.forEach((item, index) => {
+        const div = document.createElement("div");
+        div.classList.add("item");
+        div.innerHTML = `
+          <strong>${item.nombre} ${item.apellidos}</strong><br>
+          Telefono: ${item.telefono}<br>
+          ${item.tipoDoc}: ${item.documento}<br>
+          Correo: ${item.correo}<br>
+          Fecha  De Nacimiento: ${item.nacimiento}
+        `;
+
+        const btn = document.createElement("button");
+        btn.textContent = "❌";
+        btn.onclick = () => {
+          data.splice(index, 1);
+          pintarLista();
+        };
+
+        div.appendChild(btn);
+        lista.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
+
