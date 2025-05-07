@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Pokémon</title>
+
+    <style>
+
+        .contenedor {
+            height: auto; 
+            background-color: #87878a; 
+            padding-top: 50px;
+            padding-bottom: 50px;
+            width: 100%;
+        }
+
+        .tituloPokemon img {
+            width: 850px;
+            height: 280px;
+            padding-left: 220px;
+        }
+
+        .tituloPokemon:hover{
+        transform: scale(1.1); 
+        }
+        
+
+        .contenedorDos {
+            width: 420px;
+            height: 550px;
+            background-color: rgb(143, 131, 141);
+            margin-left: 445px;
+            margin-top: 0px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 10px;
+            box-shadow: #5e5555;
+        }
+
+        .contenedorNombreImagen {
+            width: 390px;
+            height: 490px;
+            background-color: rgb(255, 255, 255);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 10px;
+            box-shadow: #5e5555;
+            padding-bottom: 30px;
+        }
+
+        #nombre {
+            font-family: serif;
+            color: rgb(0, 0, 0);
+            font-size: 45px;
+            text-transform: uppercase;
+            text-align: center;
+            padding-top: 30px;
+        }
+
+        #imagenPokemon {
+            width: 360px;
+            height: 360px;
+            padding: 0;
+            margin: 0;
+        }
+
+        #imagenPokemon:hover {
+            transform: scale(1.2); 
+        }
+
+        .alturaPeso {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            padding: 0;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .altura h1,
+        .peso h1 {
+            display: inline-block;
+            gap: 10px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .numeroDePokemon h1 {
+            font-size: 35px;
+            display: inline-block;
+            padding-bottom: 20px;
+            padding-top: 10px;
+            margin: 0;
+        }
+
+        #Numero h1 {
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+        }
+
+        .contenedorEstadisticas {
+            width: 330px;
+            height: 450px;
+            background-color: rgb(143, 131, 141);
+            margin-left: 940px;
+            margin-top: -480px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 10px;
+            box-shadow: #5e5555;
+        }
+
+        .contenedorBarraEstadisticas {
+            width: 310px;
+            height: 390px;
+            background-color: rgb(255, 255, 255);
+            flex-direction: column;
+            border-radius: 10px;
+            box-shadow: #5e5555;
+            padding-bottom: 30px;
+        }
+
+        .contenedorBarraEstadisticas h2 {
+            font-family: serif;
+            color: #000000;
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .estadistica {
+            margin-bottom: 10px;
+            color: #eee;
+            gap: 10px;
+            padding-left: 20px;
+            padding-right: 20px;
+             
+        }
+
+        .nombreEstadistica {
+            font-weight: bold;
+            color: #000000;
+            width: 120px;
+            text-align: left;
+        }
+
+        .barraContenedor {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            height: 10px;
+            width: 100%;
+            flex-grow: 1; 
+            margin-left: 10px; 
+            margin-right: 10px; 
+        }
+
+        .barra {
+            background-color: #64b5f6;
+            height: 100%;
+            border-radius: 5px;
+            width: 0%; 
+        }
+
+        .valorEstadistica {
+            width: 40px;
+            text-align: right;
+            color: #000000;
+            font-size: 14px;
+        }
+
+        .contenedorTiposDebilidadesUno {
+            width: 330px;
+            height: 450px;
+            background-color: rgb(143, 131, 141);
+            margin-left: 40px;
+            margin-top: -440px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 10px;
+            box-shadow: #5e5555;
+            margin-bottom: 30px;
+        }
+
+        .contenedorTiposDebilidadesDos {
+            width: 310px;
+            height: 390px;
+            background-color: rgb(255, 255, 255);
+            flex-direction: column;
+            border-radius: 10px;
+            box-shadow: #5e5555;
+            padding-bottom: 30px;
+        }
+
+        .tiposPokemon {
+            font-size: 12px; 
+            font-family: serif;
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            margin-bottom: 15px; 
+        }
+
+        .tipos {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            justify-content: center; 
+        }
+
+        .tipo {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: white;
+            padding: 10px 30px;
+            border-radius: 5px;
+            font-size: 15px;
+        }
+
+        .debilidades {
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+
+        .debilidades h2 {
+            font-family: serif;
+            color: #000000;
+            margin-bottom: 10px; 
+            margin-top: -190px;
+        }
+
+        .tiposDebilidades {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+            flex-wrap: wrap; 
+        }
+
+
+    @media (max-width: 1024px) {
+    .contenedor {
+        align-items: center; 
+    }
+
+    .tituloPokemon img {
+        width: 80%; 
+        padding-left: 0;
+    }
+
+    .contenedorDos {
+        width: 80%; 
+        margin-left: auto;
+        margin-right: auto; 
+        background-color: transparent;
+    }
+
+    .contenedorTiposDebilidadesDos,
+    .contenedorBarraEstadisticas,
+    .contenedorNombreImagen{
+        width: 80%;
+        box-shadow: 0 5px 20px black;
+    }
+
+    .contenedorEstadisticas {
+        width: 80%; 
+        margin-left: auto;
+        margin-right: auto; 
+        margin-top: 20px;
+        background-color: transparent;
+    }
+
+    .contenedorTiposDebilidadesUno {
+        width: 80%; 
+        margin-left: auto;
+        margin-right: auto; 
+        margin-top: 20px;
+        flex-wrap: wrap;
+        background-color: transparent;
+    }
+
+    .tituloPokemon{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .debilidades{
+        display: flex;
+        flex-wrap: wrap;
+        width: 70%;
+    }
+
+    #imagenPokemon {
+        width: 360px;
+        height: 360px;
+        }
+
+}
+
+    /* Media query para pantallas medianas (tablets, con un ancho máximo de 768px) */
+@media (max-width: 768px) {
+    .tituloPokemon img {
+        width: 80%; 
+        padding-left: 0;
+    }
+
+    .contenedorDos {
+        width: 75%; 
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .contenedorEstadisticas {
+        width: 75%; 
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+    }
+
+    .contenedorTiposDebilidadesUno {
+        width: 75%; 
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px; 
+    }
+    
+}
+
+/* Media query para pantallas pequeñas (móviles, con un ancho máximo de 480px) */
+@media (max-width: 425px) {
+
+    .tituloPokemon{
+        width: 400px;
+        height: 80px;
+    }
+
+    #imagenPokemon{
+        width: 270px;
+    }
+
+    .contenedorBarraEstadisticas,
+    .contenedorNombreImagen{
+        width: 100%;
+        height: 400px;
+    }
+
+    .contenedorTiposDebilidadesDos{
+        height: 290px;
+        width: 100%;
+    }
+
+    .contenedorTiposDebilidadesUno,
+    .contenedorEstadisticas{
+        margin-top: -50px;
+    }
+
+    #nombre {
+        font-size: 24px; 
+    }
+
+    .alturaPeso {
+        flex-direction: column; 
+        align-items: center; 
+        gap: 10px;
+        font-size: 11px;
+    }
+
+    .numeroDePokemon h1 {
+        font-size: 20px; 
+    }
+
+    .nombreEstadistica {
+        width: 80px; 
+        font-size: 14px;
+    }
+
+    .valorEstadistica {
+        font-size: 13px;
+    }
+
+    .tipo {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+
+    .tiposPokemon h1 {
+        font-size: 21px;
+    }
+
+    .debilidades h2 {
+        font-size: 21px;
+        padding-top: 30px;
+    }
+}
+
+/* Media query para pantallas de 375px */
+@media (min-width: 321px) and (max-width: 375px) {
+
+    .tituloPokemon{
+        width: 90%;
+        padding-left: 10px;
+        height: 100px;
+    }
+
+    #nombre {
+        font-size: 22px;
+    }
+
+    #imagenPokemon {
+        width: 240px;
+    }
+
+    .alturaPeso {
+        font-size: 20px;
+        gap: 15px;
+    }
+
+    .altura h1,
+    .peso h1 {
+        font-size: 20px;
+    }
+
+    .numeroDePokemon h1 {
+        font-size: 20px;
+    }
+
+    .nombreEstadistica {
+        font-size: 14px;
+        width: 80px;
+    }
+
+    .valorEstadistica {
+        font-size: 14px;
+    }
+
+    .tipo {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+
+    .tiposPokemon h1 {
+        font-size: 20px;
+    }
+
+    .debilidades h2 {
+        font-size: 20px;
+    }
+    }
+
+/* Media query para pantallas de 320px */
+@media (max-width: 320px) {
+    .contenedor {
+        padding-left: 20px; 
+        padding-right: 20px;
+    }
+
+    .tituloPokemon{
+        width: 100%;
+        height: 100px;
+    }
+
+    .contenedorDos {
+        width: 95%; 
+    }
+
+    .contenedorNombreImagen {
+        width: 95%; 
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #nombre {
+        font-size: 30px; 
+    }
+
+    #imagenPokemon {
+        width: 100%;
+    }
+
+    .alturaPeso {
+        flex-direction: column; 
+        align-items: flex-start; 
+        font-size: 14px;
+        gap: 5px;
+    }
+
+    .altura h1,
+    .peso h1 {
+        font-size: 20px;
+    }
+
+    .numeroDePokemon h1 {
+        font-size: 20px; 
+    }
+
+    .contenedorEstadisticas,
+    .contenedorTiposDebilidadesUno {
+        width: 95%;
+        margin-top: -30px; 
+        margin-bottom: -10px; 
+    }
+
+    .contenedorBarraEstadisticas h2,
+    .tiposPokemon h1,
+    .debilidades h2 {
+        font-size: 20px; 
+    }
+
+    .nombreEstadistica {
+        font-size: 14px;
+        width: 60px;
+    }
+
+    .valorEstadistica {
+        font-size: 14px;
+    }
+
+    .tipo {
+        padding: 4px 8px;
+        font-size: 14px;
+    }
+
+    .tipos,
+    .tiposDebilidades {
+        gap: 3px; 
+    }
+}
+    </style>
+</head>
+
+<body>
+    <div class="contenedor" id="contenedorPrincipal">
+        <div class="tituloPokemon">
+            <img src="https://static.vecteezy.com/system/resources/previews/027/127/571/non_2x/pokemon-logo-pokemon-icon-transparent-free-png.png"
+                alt="Logo Pokemon" class="tituloPokemon">
+        </div>
+        <div class="contenedorDos">
+            <div class="contenedorNombreImagen">
+                <h1 id="nombre"></h1>
+                <img id="imagenPokemon" src="" alt="">
+                <div class="alturaPeso">
+                    <div class="altura">
+                        <h1>Altura:</h1>
+                        <h1 id="Altura"></h1>
+                        <h1>m</h1>
+                    </div>
+                    <div class="peso">
+                        <h1>Peso:</h1>
+                        <h1 id="Peso"></h1>
+                        <h1>kg</h1>
+                    </div>
+                </div>
+                <div class="numeroDePokemon">
+                    <h1>#</h1>
+                    <h1 id="Numero"></h1>
+                </div>
+            </div>
+        </div>
+        <div class="contenedorEstadisticas">
+            <div class="contenedorBarraEstadisticas">
+                <h2>Estadísticas</h2>
+                <div class="estadistica">
+                    <span class="nombreEstadistica">HP:</span>
+                    <div class="barraContenedor">
+                        <div id="hpBarra" class="barra" data-stat-id="hp"></div>
+                    </div>
+                    <span id="hpValor" class="valorEstadistica"></span>
+                </div>
+                <div class="estadistica">
+                    <span class="nombreEstadistica">Ataque:</span>
+                    <div class="barraContenedor">
+                        <div id="ataqueBarra" class="barra" data-stat-id="attack"></div>
+                    </div>
+                    <span id="ataqueValor" class="valorEstadistica"></span>
+                </div>
+                <div class="estadistica">
+                    <span class="nombreEstadistica">Defensa:</span>
+                    <div class="barraContenedor">
+                        <div id="defensaBarra" class="barra" data-stat-id="defense"></div>
+                    </div>
+                    <span id="defensaValor" class="valorEstadistica"></span>
+                </div>
+                <div class="estadistica">
+                    <span class="nombreEstadistica">Ataque Especial:</span>
+                    <div class="barraContenedor">
+                        <div id="ataqueEspecialBarra" class="barra" data-stat-id="special-attack"></div>
+                    </div>
+                    <span id="ataqueEspecialValor" class="valorEstadistica"></span>
+                </div>
+                <div class="estadistica">
+                    <span class="nombreEstadistica">Defensa Especial:</span>
+                    <div class="barraContenedor">
+                        <div id="defensaEspecialBarra" class="barra" data-stat-id="special-defense"></div>
+                    </div>
+                    <span id="defensaEspecialValor" class="valorEstadistica"></span>
+                </div>
+                <div class="estadistica">
+                    <span class="nombreEstadistica">Velocidad:</span>
+                    <div class="barraContenedor">
+                        <div id="velocidadBarra" class="barra" data-stat-id="speed"></div>
+                    </div>
+                    <span id="velocidadValor" class="valorEstadistica"></span>
+                </div>
+            </div>
+        </div>
+        <div class="contenedorTiposDebilidadesUno">
+            <div class="contenedorTiposDebilidadesDos">
+                <div class="tiposPokemon">
+                    <h1>Tipos Del Pokemon</h1>
+                </div>
+                <div class="tipos" id="contenedorTipos">
+                    </div>
+            </div>
+            <div class="debilidades">
+                <h2>Debilidades</h2>
+                <div class="tiposDebilidades" id="contenedorDebilidades">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const contenedorPrincipal = document.getElementById("contenedorPrincipal");
+            const maxStatValue = 255;
+            const contenedorTipos = document.getElementById("contenedorTipos");
+            const contenedorDebilidades = document.getElementById("contenedorDebilidades");
+            
+
+            function generarNumeroAleatorio() {
+                return Math.floor(Math.random() * 300) + 1;
+            }
+
+            const pokemonId = generarNumeroAleatorio();
+
+            try {
+                const respuesta = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`);
+                const pokemonData = respuesta.data;
+                console.log("Datos del Pokémon:", pokemonData);
+
+                document.getElementById("nombre").textContent = pokemonData.name;
+                document.getElementById("imagenPokemon").src = pokemonData.sprites.other["official-artwork"].front_default;
+                document.getElementById("imagenPokemon").alt = `Imagen de ${pokemonData.name}`;
+                document.getElementById("Altura").textContent = (pokemonData.height / 10).toFixed(1); 
+                document.getElementById("Peso").textContent = (pokemonData.weight / 10).toFixed(1); 
+                document.getElementById("Numero").textContent = pokemonData.id;
+                document.getElementById("Numero").textContent = pokemonData.id;
+
+                const tiposPokemon = pokemonData.types.map(typeInfo => typeInfo.type.name);
+                console.log("Tipos de Pokémon:", tiposPokemon);
+
+                function obtenerColorBasePorTipo(tipo) {
+                    switch (tipo) {
+                        case 'water': return '#424FC5FF';
+                        case 'electric': return '#fdd835';
+                        case 'fire': return '#FF9900FF';
+                        case 'grass': return '#34AA3AFF';
+                        case 'ground': return '#795D40FF';
+                        case 'rock': return '#a3a3a3';
+                        case 'poison': return '#9c27b0';
+                        case 'flying': return '#99CAF3FF';
+                        case 'bug': return '#aed581';
+                        case 'normal': return '#FFC5C5FF';
+                        case 'fighting': return '#ff6f60';
+                        case 'psychic': return '#ea80fc';
+                        case 'ghost': return '#9575cd';
+                        case 'ice': return '#b3e5fc';
+                        case 'dragon': return '#6a1b9a';
+                        case 'steel': return '#b0bec5';
+                        case 'dark': return '#424242';
+                        case 'fairy': return '#f48fb1';
+                        default: return '#3a506b'; 
+                    }
+                }
+
+                function generarDegradadoParaFondo(tipos) {
+                    if (!tipos || tipos.length === 0) {
+                        return 'linear-gradient(135deg, #3a506b, #293b5f)'; 
+                    } else if (tipos.length === 1) {
+                        const color = obtenerColorBasePorTipo(tipos[0]);
+                        return `linear-gradient(135deg, ${color}, ${color})`;
+                    } else {
+                        const color1 = obtenerColorBasePorTipo(tipos[0]);
+                        const color2 = obtenerColorBasePorTipo(tipos[1]);
+                        return `linear-gradient(135deg, ${color1}, ${color2})`; 
+                    }
+                }
+
+                contenedorPrincipal.style.background = generarDegradadoParaFondo(tiposPokemon);
+
+                tiposPokemon.forEach(tipo => {
+                    const tipoElemento = document.createElement('span');
+                    tipoElemento.classList.add('tipo');
+                    tipoElemento.textContent = tipo;
+                    tipoElemento.style.backgroundColor = obtenerColorBasePorTipo(tipo);
+                    contenedorTipos.appendChild(tipoElemento);
+                });
+
+                function actualizarBarraConDegradado(idBarra, valor, limite, tipos) {
+                    const barra = document.getElementById(idBarra);
+                    const porcentaje = (valor / limite) * 100;
+                    barra.style.width = `${porcentaje}%`;
+
+                    let colorInicio = '#ccc'; 
+                    let colorFin = '#ccc'; 
+
+                    if (tipos && tipos.length > 0) {
+                        colorInicio = obtenerColorBasePorTipo(tipos[0]);
+                        colorFin = tipos.length > 1 ? obtenerColorBasePorTipo(tipos[1]) : colorInicio;
+                    }
+
+                    barra.style.backgroundImage = `linear-gradient(to right, ${colorInicio}, ${colorFin})`;
+                }
+
+                const stats = pokemonData.stats.reduce((acc, stat) => {
+                    acc[stat.stat.name] = stat.base_stat;
+                    return acc;
+                }, {});
+
+                document.getElementById("hpValor").textContent = `${stats.hp}/${maxStatValue}`;
+                actualizarBarraConDegradado("hpBarra", stats.hp, maxStatValue, tiposPokemon);
+
+                document.getElementById("ataqueValor").textContent = `${stats.attack}/${maxStatValue}`;
+                actualizarBarraConDegradado("ataqueBarra", stats.attack, maxStatValue, tiposPokemon);
+
+                document.getElementById("defensaValor").textContent = `${stats.defense}/${maxStatValue}`;
+                actualizarBarraConDegradado("defensaBarra", stats.defense, maxStatValue, tiposPokemon);
+
+                document.getElementById("ataqueEspecialValor").textContent = `${stats["special-attack"]}/${maxStatValue}`;
+                actualizarBarraConDegradado("ataqueEspecialBarra", stats["special-attack"], maxStatValue, tiposPokemon);
+
+                document.getElementById("defensaEspecialValor").textContent = `${stats["special-defense"]}/${maxStatValue}`;
+                actualizarBarraConDegradado("defensaEspecialBarra", stats["special-defense"], maxStatValue, tiposPokemon);
+
+                document.getElementById("velocidadValor").textContent = `${stats.speed}/${maxStatValue}`;
+                actualizarBarraConDegradado("velocidadBarra", stats.speed, maxStatValue, tiposPokemon);
+
+                const debilidades = new Set();
+                for (const typeInfo of pokemonData.types) {
+                    const respuestaTipo = await axios.get(typeInfo.type.url);
+                    const tipoData = respuestaTipo.data;
+                    tipoData.damage_relations.double_damage_from.forEach(weakness => {
+                        debilidades.add(weakness.name);
+                    });
+                }
+                console.log("Debilidades del Pokémon:", [...debilidades]);
+
+                debilidades.forEach(debilidad => {
+                    const debilidadElemento = document.createElement('span');
+                    debilidadElemento.classList.add('tipo');
+                    debilidadElemento.textContent = debilidad;
+                    debilidadElemento.style.backgroundColor = obtenerColorBasePorTipo(debilidad);
+                    contenedorDebilidades.appendChild(debilidadElemento);
+                });
+
+            } catch (error) {
+                console.error("Error al obtener el Pokémon:", error);
+            }
+        });
+        
+
+        
+    </script>
+</body>
+
+</html>
