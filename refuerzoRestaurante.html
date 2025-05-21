@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="contenedorBotonesSuperiores">
+        <div class="btnBuscarMesa">
+            <input type="text" id="buscarMesa" placeholder="Buscar por número de mesa">
+            <button id="botonBuscarMesa">Buscar</button>
+        </div>
+            <button id="mostrarFormulario" style="padding: 10px 20px; background-color:#007bff; color: white; border-radius: 5px; font-size: 16px; z-index: 1000;">Crear Registro</button>
+        </div>
+
+    <div class="contenedorCuestionario">
+        <h1>Restaurante</h1>
+    <div style="display: flex; flex-direction: column; gap: 20px; width: 70%;">
+        <input type="text" name="" id="nro" placeholder="Número De La Mesa">
+        <input type="text" name="" id="descripcion" placeholder="Descripción De La Mesa">
+        <input type="text" name="" id="personas" placeholder="Capacidad De La Mesa">
+        <select name="" id="estado">
+            <option value="">Seleccione el estado de la Mesa</option>
+            <option value="Libre">Libre</option>
+            <option value="Ocupada">Ocupada</option>
+            <option value="Reservada">Reservada</option>
+        </select>
+        <button id="registrar">Guardar Mesa</button>
+    </div>
+
+    </div>
+
+     <div id="contenedorMensajeError">
+            <div class="alertContenedor">
+                <p id="textoMensajeError"></p>
+                <button class="alert-button" onclick="cerrarMensajeAlerta('contenedorMensajeError')">Aceptar</button>
+            </div>
+     </div>
+
+      <div id="contenedorMensajeExito">
+            <div class="alertContenedor">
+                <p id="textoMensajeExito"></p>
+                <button class="alert-button" onclick="cerrarMensajeAlerta('contenedorMensajeExito')">Aceptar</button>
+            </div>
+     </div>
+
+        <div id="contenedorMesas">
+        <div id="mesas">
+    </div>
+    </div>
+    <script>
+        let datosMesa = []
+        let modo = 0
+        let numMesa = ""
+
+        const botonMostrarFormulario = document.getElementById("mostrarFormulario");
+        const mostrarCuestionario = document.querySelector(".contenedorCuestionario");
+        const botonBuscarMesa = document.getElementById("botonBuscarMesa"); 
+        const buscarMesa = document.getElementById("buscarMesa");
+
+        mostrarFormulario.addEventListener("click",()=>{
+            mostrarCuestionario.style.display="flex";
+        });
+        
+        document.getElementById("registrar").addEventListener("click", () => {
+            if (modo == 0) {
+                console.log("estoy guardando...");
+
+                guardarMesa()
+            } else if (modo == 1) {
+
+                console.log("estoy editando...");
+                editarMesa()
+            }
+
+        })
+
+        function mostrarMensajeAlerta(idContenedorAlerta, mensajeParaMostrar) {
+            const contenedorAlerta = document.getElementById(idContenedorAlerta);
+            const textoAlerta = contenedorAlerta.querySelector('p');
+            textoAlerta.textContent = mensajeParaMostrar;
+            contenedorAlerta.style.display = "flex";
+        }
+
+        function cerrarMensajeAlerta(idContenedorAlerta) {
+            const contenedorAlerta = document.getElementById(idContenedorAlerta);
+            contenedorAlerta.style.display = "none";
+        }
+
+        function guardarMesa() {
+            if (document.getElementById("nro").value == "") {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, digite el número de la mesa.");
+            } else if (document.getElementById("descripcion").value == "") {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, digite la descripción de la mesa.");
+            } else if (document.getElementById("personas").value == "") {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, digite la capacidad de la mesa.");
+            } else if (document.getElementById("estado").value == "") {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, seleccione el estado de la mesa.");
+            }else{
+                let mesa = {
+                    numero: document.getElementById("nro").value,
+                    descripcion: document.getElementById("descripcion").value,
+                    personas: document.getElementById("personas").value,
+                    estado: document.getElementById("estado").value,
+                }
+
+            let numMesaExiste = datosMesa.some(item => item.numero === mesa.numero);
+                if (numMesaExiste) {
+                    mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Ya existe una mesa con ese número.");
+                    return;
+                }
+
+                console.log(mesa);
+                datosMesa.unshift(mesa)
+                mostrarMensajeAlerta('contenedorMensajeExito',"✅Registro exitoso")
+                limpiar()
+                console.log(datosMesa);
+                pintarMesas()
+
+                
+            }
+        }
+
+        function limpiar() {
+            document.getElementById("nro").value = ""
+            document.getElementById("descripcion").value = ""
+            document.getElementById("personas").value = ""
+            document.getElementById("estado").value = ""
+        }
+
+        function editarMesa() {
+            let indice = datosMesa.findIndex(it => it.numero == numMesa)
+            console.log(indice);
+            datosMesa[indice].numero = document.getElementById("nro").value
+            datosMesa[indice].descripcion = document.getElementById("descripcion").value
+            datosMesa[indice].personas = document.getElementById("personas").value
+            datosMesa[indice].estado = document.getElementById("estado").value
+            pintarMesas()
+            modo = 0
+            document.getElementById("registrar").textContent = "Guardar Mesa"
+            limpiar()
+        }
+
+        function pintarMesas() {
+            document.getElementById("mesas").textContent = ""
+            datosMesa.forEach((item, i) => {
+                let divCard = document.createElement("div")
+                divCard.id = "divCard"
+
+                 if (item.estado == "Libre") {
+                        divCard.style.backgroundColor = '#FF665CFF';
+                    } else if (item.estado == "Ocupada") {
+                        divCard.style.backgroundColor = '#FFD041FF';
+                    }else if (item.estado == "Reservada") {
+                        divCard.style.backgroundColor = '#51FFAEFF';
+                    }else {
+                        divCard.style.backgroundColor = '#FFFFFFFF';
+                    }
+
+                let divImagen = document.createElement("div")
+                let imagen = document.createElement("img")
+                imagen.id = "mesa"
+                imagen.src = "https://img.freepik.com/vector-premium/dibujos-animados-mesa_119631-412.jpg "
+                divImagen.appendChild(imagen)
+                divCard.appendChild(divImagen)
+                document.getElementById("mesas").appendChild(divCard)
+
+                let divTextos = document.createElement("div")
+                divTextos.id = "divTextos"; 
+                divCard.appendChild(divTextos)
+                
+                let numeroMesaTitulo = document.createElement("span")
+                numeroMesaTitulo.textContent = "Número De Mesa: "
+                let numeroMesa = document.createElement("span")
+                numeroMesa.textContent = item.numero
+                divTextos.appendChild(numeroMesaTitulo)
+                divTextos.appendChild(numeroMesa)
+                divTextos.appendChild(document.createElement("br"))
+                
+                let parrafoDescripcionTitulo = document.createElement("span")
+                parrafoDescripcionTitulo.textContent = "Descripción: "
+                let parrafoDescripcion = document.createElement("span")
+                parrafoDescripcion.textContent = item.descripcion
+                divTextos.appendChild(parrafoDescripcionTitulo)
+                divTextos.appendChild(parrafoDescripcion)
+                divTextos.appendChild(document.createElement("br"))
+                
+                let divBotones = document.createElement("div")
+
+                let estadoMesaTitulo = document.createElement("span")
+                estadoMesaTitulo.textContent = "Estado De Mesa: "
+                let estadoMesa=document.createElement("span")
+                estadoMesa.textContent=item.estado
+                divTextos.appendChild(estadoMesaTitulo)
+                divTextos.appendChild(estadoMesa)
+                divTextos.appendChild(document.createElement("br"))
+                
+                let personasMesaTitulo = document.createElement("span")
+                personasMesaTitulo.textContent = "Número De Personas: "
+                let personasMesa=document.createElement("span")
+                personasMesa.textContent=item.personas
+                divTextos.appendChild(personasMesaTitulo)
+                divTextos.appendChild(personasMesa)
+                divTextos.appendChild(document.createElement("br"))
+
+                let editar = document.createElement("button")
+                editar.textContent = "✍️"
+                editar.addEventListener("click", () => {
+                    document.getElementById("nro").value = item.numero
+                    document.getElementById("descripcion").value = item.descripcion
+                    document.getElementById("personas").value = item.personas
+                    document.getElementById("estado").value = item.estado
+                    document.getElementById("registrar").textContent = "Editar Mesa"
+                    modo = 1
+                    numMesa = item.numero
+                })
+
+                let eliminar = document.createElement("button")
+                eliminar.textContent = "❌"
+                eliminar.addEventListener("click", () => {
+                    //findIndex nos permite traer el indice de acuerdo a una condicion
+                    let indice = datosMesa.findIndex(it => it.numero == item.numero)
+                    console.log(indice);
+                    datosMesa.splice(indice, 1)
+                    console.log(datosMesa);
+                    pintarMesas()
+                })
+
+                divBotones.appendChild(editar)
+                divBotones.appendChild(eliminar)
+                divCard.appendChild(divBotones)
+            })
+        }
+
+    
+    botonBuscarMesa.addEventListener("click", () => {
+    const numeroMesaBuscar = buscarMesa.value.trim(); 
+    document.getElementById("mesas").textContent = ""; 
+
+    if (numeroMesaBuscar === "") {
+        pintarMesas();
+    } else {
+       
+        const mesaEncontrada = datosMesa.find(item => item.numero === numeroMesaBuscar);
+
+        if (mesaEncontrada) {
+            let divCard = document.createElement("div");
+            divCard.id = "divCard";
+
+           
+            if (mesaEncontrada.estado == "Libre") {
+                divCard.style.backgroundColor = '#FF665CFF';
+            } else if (mesaEncontrada.estado == "Ocupada") {
+                divCard.style.backgroundColor = '#FFD041FF';
+            } else if (mesaEncontrada.estado == "Reservada") {
+                divCard.style.backgroundColor = '#51FFAEFF';
+            }
+
+           
+            let divImagen = document.createElement("div");
+            let imagen = document.createElement("img");
+            imagen.id = "mesa";
+            imagen.src = "https://img.freepik.com/vector-premium/dibujos-animados-mesa_119631-412.jpg";
+            divImagen.appendChild(imagen);
+            divCard.appendChild(divImagen);
+
+            let divTextos = document.createElement("div");
+            let parrafoDescripcion = document.createElement("p");
+            let numeroMesa = document.createElement("span");
+            numeroMesa.textContent = mesaEncontrada.numero;
+            parrafoDescripcion.textContent = mesaEncontrada.descripcion;
+            divTextos.appendChild(parrafoDescripcion);
+            divTextos.appendChild(numeroMesa);
+            divCard.appendChild(divTextos);
+
+            let estadoMesa = document.createElement("p");
+            estadoMesa.textContent = mesaEncontrada.estado;
+            divTextos.appendChild(estadoMesa);
+
+            let personasMesa = document.createElement("p");
+            personasMesa.textContent = mesaEncontrada.personas;
+            divTextos.appendChild(personasMesa);
+
+            document.getElementById("mesas").appendChild(divCard);
+        } else {
+            mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Mesa no encontrada.");
+        }
+    }
+});
+
+    buscarMesa.addEventListener("input", () => {
+    const numeroMesaBuscar = buscarMesa.value.trim(); 
+
+    if (numeroMesaBuscar === "") {
+        document.getElementById("mesas").textContent = ""; 
+        pintarMesas(); 
+    }
+});
+    </script>
+    <style>
+        
+        .container{
+            background-color: #b4bec9;
+            font-family: Arial;
+            background-size: cover;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin: 0;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .contenedorCuestionario{
+            background-color: rgb(255, 255, 255);
+            border-radius: 8px;
+            width: 350px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            display:none;
+            margin-left: 490px;
+            margin-top: 40px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .contenedorCuestionario h1{
+            font-size: 50px;
+            font-family: serif;
+            color: rgb(0, 0, 0);
+        }
+
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #registrar{
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #000000;
+            background-color: #398fff;
+            border-radius: 4px;
+            color: black;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+
+        #mesa {
+            height: 230px;
+            width: 247px;
+            border-top-left-radius: 8px; 
+            border-top-right-radius: 8px;
+        }
+
+        #divCard {
+            border: 1px solid gray;
+            border-radius: 8px;
+            box-shadow: 3px 3px 3px gray;
+            background-color: #c7a7bf;
+        }
+
+        #mesas {
+            display: grid;
+            grid-template-columns: repeat(3, 250px);
+            gap: 15px;
+        }
+
+         #contenedorMensajeError {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #contenedorMensajeError .alertContenedor {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            min-width: 300px;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+        }
+
+        #contenedorMensajeError .alert-button {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        #contenedorMensajeExito {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #contenedorMensajeExito .alertContenedor {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            min-width: 300px;
+            color: green;
+            font-weight: bold;
+        }
+
+        #contenedorMensajeExito .alert-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        #contenedorMesas {
+            width: 75%;
+            background-color:transparent;
+            border-radius: 8px;
+            margin-top: 100px;
+            margin-left: 170px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 30px;
+        }
+
+        .contenedorBotonesSuperiores{
+            height: 100px;
+            display: flex;
+            align-items: center;
+            margin-left: 830px;
+            gap:20px;
+        }
+
+       .btnBuscarMesa {
+            display: flex; 
+            width: 300px; 
+        }
+
+        .btnBuscarMesa input[type="text"] {
+            border-top-right-radius: 0px; 
+            border-bottom-right-radius: 0; 
+            border-right: none; 
+        }
+
+        .btnBuscarMesa button {
+            padding: 9px 10px; 
+            background-color: #6c757d; 
+            color: white;
+            border-top-left-radius: 0; 
+            border-bottom-left-radius: 0; 
+            border-top-right-radius: 5px; 
+            border-bottom-right-radius: 5px; 
+            cursor: pointer;
+            font-size: 17px;
+        }
+
+        #divTextos {
+            padding: 0 10px; 
+        }
+
+        #divCard #divTextos {
+            margin-top: 15px; 
+            margin-bottom: 15px; 
+        }
+
+        #divCard button { 
+            padding: 8px 15px; 
+            font-size: 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer; 
+        }
+
+        #divCard {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+             padding-bottom: 10px; 
+        }
+
+    </style>
+</body>
+
+</html>
+
