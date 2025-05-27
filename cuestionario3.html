@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Registro</title>
+    <style>
+        body {
+            font-family: Arial;
+            display: flex;
+            background: url('https://images.unsplash.com/photo-1655998233171-ee5b130acba5?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding-top: 50px;
+            margin: 0;
+            width: 100%;
+            height: auto;
+            min-height: 100vh;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        #botonCrearRegistro {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #5cb85c;
+            color: rgb(61, 57, 57);
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 10;
+            border: 1px solid #000000;
+        }
+
+        #botonCrearRegistro:hover {
+            background-color: #4cae4c;
+        }
+
+        .formulario-contenedor {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 440px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            display: block;
+            margin-left: 45px;
+        }
+
+        .generoContenedor {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            margin-left: 45px;
+            text-align: center;
+        }
+
+        .generoContenedor label {
+            font-size: 13px;
+            margin-right: 10px;
+            font-weight: normal;
+            color: #555;
+        }
+
+        .generoContenedor  label:first-child {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .generoContenedor input[type="radio"] {
+            margin-right: 3px;
+        }
+
+        button[type="submit"] {
+            background-color: #7c1058;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 80%;
+            margin-left: 45px;
+        }
+
+        #listaDatos {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 1000px;
+            overflow-x: auto;
+            display: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #e6dddd;
+        }
+
+        .botonEliminarRegistro {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 10px;
+            margin-left: -0px;
+        }
+
+        .botonEliminarRegistro:hover {
+            background-color: #c82333;
+        }
+
+        .botonEditarRegistro {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 6px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 10px;
+            margin-left: 5px;
+        }
+
+        .botonEditarRegistro:hover {
+            background-color: #0056b3;
+        }
+
+        #contenedorMensajeError {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #contenedorMensajeError .alertContenedor {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            min-width: 300px;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+        }
+
+        #contenedorMensajeError .alert-button {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        #contenedorMensajeExito {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #contenedorMensajeExito .alertContenedor {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            min-width: 300px;
+            color: green;
+            font-weight: bold;
+        }
+
+        #contenedorMensajeExito .alert-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        #contenedorMensajeConfirmacion {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1001; 
+        }
+
+        #contenedorMensajeConfirmacion .alertContenedor {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            min-width: 300px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        #contenedorMensajeConfirmacion .confirm-buttons {
+            margin-top: 15px;
+            display: flex; 
+            flex-direction: row-reverse; 
+            justify-content: flex-end; 
+        }
+
+        #contenedorMensajeConfirmacion .confirm-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px; 
+            font-weight: normal;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0px 20px;
+        }
+
+        #contenedorMensajeConfirmacion .cancel-button {
+            background-color: #ffffff;
+            margin-left: 70px;
+        }
+
+        #contenedorMensajeConfirmacion .confirm-button:hover {
+            background-color: #28a745;
+        }
+
+        #contenedorMensajeConfirmacion .cancel-button:hover {
+            background-color: #545b62;
+        }
+
+       #contenedorBusqueda {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #campoBusquedaCedula {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        #botonBuscarCedula {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #botonBuscarCedula:hover {
+            background-color: #0056b3;
+        }
+
+        #mensajeNoEncontrado {
+            background-color: #ffe0e0;
+            color: #dc3545;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: none;
+            text-align: center;
+            font-weight: bold;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <button id="botonCrearRegistro">Crear Registro</button>
+     <div id="contenedorBusqueda">
+        <input type="number" id="campoBusquedaCedula" placeholder="Buscar por cédula">
+        <button id="botonBuscarCedula">Buscar</button>
+    </div>
+    <div id="mensajeNoEncontrado">No se encontró ningún registro con esa cédula.</div>
+
+    <div id="listaDatos"></div>
+
+
+    <div class="formulario-contenedor" id="formularioRegistro">
+        <h1>¡REGISTRATE!</h1>
+        <div id="contenedorMensajeError">
+            <div class="alertContenedor">
+                <p id="textoMensajeError"></p>
+                <button class="alert-button" onclick="cerrarMensajeAlerta('contenedorMensajeError')">Aceptar</button>
+            </div>
+        </div>
+        <div id="contenedorMensajeExito">
+            <div class="alertContenedor">
+                <p id="textoMensajeExito"></p>
+                <button class="alert-button" onclick="cerrarMensajeAlerta('contenedorMensajeExito')">Aceptar</button>
+            </div>
+        </div>
+        <input type="text" id="campoNombres" placeholder="Nombres"        />
+        <input type="text" id="campoApellidos" placeholder="Apellidos"        />
+        <input type="number" id="campoTelefono" placeholder="Número de teléfono"        />
+        <select id="listaTipoDocumento" >
+            <option value="">Seleccione tipo de documento</option>
+            <option value="CC">Cédula de Ciudadanía</option>
+            <option value="TI">Tarjeta de Identidad</option>
+        </select>
+        <input type="number" id="campoNumeroDocumento" placeholder="Número de documento" />
+        <input type="text" id="campoCorreoElectronico" placeholder="Correo electrónico" />
+        <input type="date" id="campoFechaNacimiento" placeholder="Fecha de nacimiento"        />
+        <div class="generoContenedor">
+            <label>Género:</label>
+            <label>
+                <input type="radio" name="genero" value="Femenino"> Femenino
+            </label>
+            <label>
+                <input type="radio" name="genero" value="Masculino"> Masculino
+            </label>
+            <label>
+                <input type="radio" name="genero" value="Otro"> Otro
+            </label>
+        </div>
+        <button type="submit" onclick="enviarFormulario()">ENVIAR</button>
+    </div>
+
+    <div id="listaDatos"></div>
+
+    <div id="contenedorMensajeConfirmacion">
+        <div class="alertContenedor">
+            <p>¿Desea eliminar este registro?</p>
+            <div class="confirm-buttons">
+                <button class="confirm-button" onclick="confirmarEliminacion()">Aceptar</button>
+                <button class="cancel-button" onclick="cerrarMensajeAlerta('contenedorMensajeConfirmacion')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+   
+
+    <script>
+        const botonCrearRegistro = document.getElementById("botonCrearRegistro");
+        const formularioRegistro = document.getElementById("formularioRegistro");
+        const listaDatosDiv = document.getElementById("listaDatos");
+        const contenedorMensajeConfirmacion = document.getElementById("contenedorMensajeConfirmacion");
+        let listaDeDatosRegistrados = [];
+        let indiceAEditar = -1;
+        let indiceAEliminar = -1; 
+
+        botonCrearRegistro.addEventListener("click", function() {
+            formularioRegistro.style.display = "block";
+            botonCrearRegistro.style.display = "none";
+            listaDatosDiv.style.display = "none";
+            indiceAEditar = -1;
+            document.getElementById("campoNombres").value = "";
+            document.getElementById("campoApellidos").value = "";
+            document.getElementById("campoTelefono").value = "";
+            document.getElementById("listaTipoDocumento").value = "";
+            document.getElementById("campoNumeroDocumento").value = "";
+            document.getElementById("campoCorreoElectronico").value = "";
+            document.getElementById("campoFechaNacimiento").value = "";
+            const radioButtons = document.querySelectorAll('input[name="genero"]');
+            radioButtons.forEach(radio => radio.checked = false);
+        });
+
+        function mostrarMensajeAlerta(idContenedorAlerta, mensajeParaMostrar) {
+            const contenedorAlerta = document.getElementById(idContenedorAlerta);
+            const textoAlerta = contenedorAlerta.querySelector('p');
+            textoAlerta.textContent = mensajeParaMostrar;
+            contenedorAlerta.style.display = "flex";
+        }
+
+        function cerrarMensajeAlerta(idContenedorAlerta) {
+            const contenedorAlerta = document.getElementById(idContenedorAlerta);
+            contenedorAlerta.style.display = "none";
+        }
+
+        function enviarFormulario() {
+            const valorNombre = document.getElementById("campoNombres").value.trim();
+            const valorApellidos = document.getElementById("campoApellidos").value.trim();
+            const valorTelefono = document.getElementById("campoTelefono").value.trim();
+            const valorTipoDocumento = document.getElementById("listaTipoDocumento").value;
+            const valorNumeroDocumento = document.getElementById("campoNumeroDocumento").value.trim();
+            const valorCorreoElectronico = document.getElementById("campoCorreoElectronico").value.trim();
+            const valorFechaNacimiento = document.getElementById("campoFechaNacimiento").value;
+            let radioGeneroSeleccionado = document.querySelector('input[name="genero"]:checked');
+            const valorGenero = radioGeneroSeleccionado ? radioGeneroSeleccionado.value : '';
+
+             if (!valorNombre) {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, ingrese su nombre.");
+                return;
+            }
+
+             if(!valorApellidos) {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, ingrese su apellido.");
+                return;
+            }
+
+             if (!valorTelefono) {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, ingrese su teléfono.");
+                return;
+            }
+
+             if (!valorTipoDocumento) {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, seleccione su tipo de documento.");
+                return;
+            }
+
+             if (!valorNumeroDocumento) {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, ingrese su número de documento");
+                return;
+            }
+
+             if (!valorCorreoElectronico) {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, ingrese su correo electrónico.");
+                return;
+            }
+
+             if (!valorFechaNacimiento) {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, ingrese su fecha de nacimiento.");
+                return;
+            }
+
+             if (!valorGenero) {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, ingrese su género.");
+                return;
+            }
+
+            const datosDelRegistro = {
+                nombre: valorNombre,
+                apellidos: valorApellidos,
+                telefono: valorTelefono,
+                tipoDocumento: valorTipoDocumento,
+                numeroDocumento: valorNumeroDocumento,
+                correoElectronico: valorCorreoElectronico,
+                fechaNacimiento: valorFechaNacimiento,
+                genero: valorGenero
+            };
+
+            if (indiceAEditar > -1) {
+                listaDeDatosRegistrados[indiceAEditar] = datosDelRegistro;
+                console.log("Datos actualizados:", datosDelRegistro);
+                mostrarMensajeAlerta('contenedorMensajeExito', "✅ Registro actualizado exitosamente.");
+                indiceAEditar = -1;
+            } else {
+                listaDeDatosRegistrados.unshift(datosDelRegistro);
+                console.log("Datos registrados:", datosDelRegistro);
+                mostrarMensajeAlerta('contenedorMensajeExito', "✅ Registro exitoso.");
+            }
+
+            console.table(listaDeDatosRegistrados);
+            dibujarListaDeRegistros();
+
+            document.getElementById("campoNombres").value = "";
+            document.getElementById("campoApellidos").value = "";
+            document.getElementById("campoTelefono").value = "";
+            document.getElementById("listaTipoDocumento").value = "";
+            document.getElementById("campoNumeroDocumento").value = "";
+            document.getElementById("campoCorreoElectronico").value = "";
+            document.getElementById("campoFechaNacimiento").value = "";
+            const radioButtons = document.querySelectorAll('input[name="genero"]');
+            radioButtons.forEach(radio => radio.checked = false);
+
+            formularioRegistro.style.display = "none";
+            botonCrearRegistro.style.display = "block";
+            listaDatosDiv.style.display = "block";
+        }
+
+        function dibujarListaDeRegistros() {
+            const contenedorListaDatos = document.getElementById("listaDatos");
+            contenedorListaDatos.innerHTML = "";
+
+            if (listaDeDatosRegistrados.length > 0) {
+                const tablaDeDatos = document.createElement("table");
+                const encabezadoTabla = document.createElement("thead");
+                const cuerpoTabla = document.createElement("tbody");
+                const nombresDeColumnas = ["Item","Nombres", "Apellidos", "Teléfono", "Tipo Doc.", "Documento", "Correo", "Nacimiento", "Genero","Editar", "Eliminar"];
+
+                const filaDeEncabezados = document.createElement("tr");
+                nombresDeColumnas.forEach(nombreColumna => {
+                    const celdaEncabezado = document.createElement("th");
+                    celdaEncabezado.textContent = nombreColumna;
+                    filaDeEncabezados.appendChild(celdaEncabezado);
+                });
+                encabezadoTabla.appendChild(filaDeEncabezados);
+                tablaDeDatos.appendChild(encabezadoTabla);
+
+                listaDeDatosRegistrados.forEach((registro, indice) => {
+                    const numeroRegistro = indice + 1;
+                    const filaDeDatos = document.createElement("tr");
+                    filaDeDatos.innerHTML = `
+                        <td>${numeroRegistro}</td>
+                        <td>${registro.nombre}</td>
+                        <td>${registro.apellidos}</td>
+                        <td>${registro.telefono}</td>
+                        <td>${registro.tipoDocumento}</td>
+                        <td>${registro.numeroDocumento}</td>
+                        <td>${registro.correoElectronico}</td>
+                        <td>${registro.fechaNacimiento}</td>
+                        <td>${registro.genero}</td>
+                        <td><button class="botonEditarRegistro" onclick="editarRegistro(${indice})">✏️</button></td>
+                        <td><button class="botonEliminarRegistro" onclick="mostrarConfirmacionEliminar(${indice})">❌</button></td>
+                    `;
+                    cuerpoTabla.appendChild(filaDeDatos);
+                });
+                tablaDeDatos.appendChild(cuerpoTabla);
+                contenedorListaDatos.appendChild(tablaDeDatos);
+            }
+        }
+
+        function mostrarConfirmacionEliminar(indiceDelRegistro) {
+            indiceAEliminar = indiceDelRegistro;
+            contenedorMensajeConfirmacion.style.display = "flex";
+        }
+
+        function confirmarEliminacion() {
+            if (indiceAEliminar > -1) {
+                eliminarRegistro(indiceAEliminar);
+                indiceAEliminar = -1; 
+            }
+            cerrarMensajeAlerta('contenedorMensajeConfirmacion');
+        }
+
+        function editarRegistro(indiceDelRegistro) {
+            const registroAEditar = listaDeDatosRegistrados[indiceDelRegistro];
+            document.getElementById("campoNombres").value = registroAEditar.nombre;
+            document.getElementById("campoApellidos").value = registroAEditar.apellidos;
+            document.getElementById("campoTelefono").value = registroAEditar.telefono;
+            document.getElementById("listaTipoDocumento").value = registroAEditar.tipoDocumento;
+            document.getElementById("campoNumeroDocumento").value = registroAEditar.numeroDocumento;
+            document.getElementById("campoCorreoElectronico").value = registroAEditar.correoElectronico;
+            document.getElementById("campoFechaNacimiento").value = registroAEditar.fechaNacimiento;
+
+            const radioButtons = document.querySelectorAll('input[name="genero"]');
+            radioButtons.forEach(radio => {
+                radio.checked = (radio.value === registroAEditar.genero);
+            });
+
+            formularioRegistro.style.display = "block";
+            botonCrearRegistro.style.display = "none";
+            listaDatosDiv.style.display = "none";
+            indiceAEditar = indiceDelRegistro;
+        }
+
+        function eliminarRegistro(indiceDelRegistro) {
+            listaDeDatosRegistrados.splice(indiceDelRegistro, 1);
+            console.table(listaDeDatosRegistrados);
+            dibujarListaDeRegistros();
+        }
+
+        dibujarListaDeRegistros();
+
+        const campoBusquedaCedula = document.getElementById("campoBusquedaCedula");
+
+        campoBusquedaCedula.addEventListener('input', buscarPorCedula);
+
+       function buscarPorCedula() {
+            const cedulaABuscar = campoBusquedaCedula.value.trim();
+            mensajeNoEncontrado.style.display = "none";
+
+            if (cedulaABuscar) {
+                const resultadoBusqueda = listaDeDatosRegistrados.find(registro => registro.numeroDocumento === cedulaABuscar);
+
+                if (resultadoBusqueda) {
+                    mostrarMensajeAlerta('contenedorMensajeExito', `✅ Se encontró a: ${resultadoBusqueda.nombre} ${resultadoBusqueda.apellidos}`);
+                    listaDatosDiv.style.display = "block"; 
+                    dibujarListaDeRegistros(); 
+                } else {
+                    mensajeNoEncontrado.style.display = "block";
+                    listaDatosDiv.style.display = listaDeDatosRegistrados.length > 0 ? "block" : "none"; 
+                }
+            } else {
+                mensajeNoEncontrado.style.display = "none";
+                listaDatosDiv.style.display = listaDeDatosRegistrados.length > 0 ? "block" : "none"; 
+            }
+        }
+    </script>
+</body>
+</html>
