@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <div class="cuadro1">
+            <h1> CENTRO VETERINARIO</h1>
+            <h2>Administrador De Citas</h2>
+            <div class="imagenIzquierda">
+            <img src="imgZapatos/imgLogo.png" alt="">
+            </div>
+            <div class="imagenDerecha">
+            <img src="imgZapatos/imgLogo.png" alt="">
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <button id="mostrarFormulario" style="padding: 10px 20px; background-color:#007bff; color: white; border-radius: 5px; font-size: 16px; z-index: 1000; margin-top: 20px;">Crear Cita</button>
+        </div>
+        <div class="contenedorFiltroBusqueda">
+        <div class="contenedorFiltrado">
+            <label for="filtroEstado">Filtrar por estado</label>
+            <select id="filtroEstado" name="filtroEstado">
+                <option value="todos" selected>Todos</option>
+                <option value="abierta">Abierta</option>
+                <option value="terminada">Terminada</option>
+                <option value="anulada">Anulada</option>
+            </select>
+        </div>
+        <div class="btnBuscarPropietario">
+            <input type="text" id="buscarPropietario" placeholder="Buscar por nombre del propietario">
+            <button id="botonBuscarPropietario">Buscar</button>
+        </div>
+        </div>
+
+        <dialog id="agendarcita">
+        <div class="contenedorCuestionario">
+            <span class="cerrarDialogo">&times;</span>
+            <h1>¡AGENDA TU CITA!</h1>
+            <div style="display: flex; flex-direction: column; gap: 20px; width: 70%;"> </div>
+            <input type="text" name="" id="nombreMascota" placeholder="Nombre De La Mascota">
+            <input type="text" name="" id="nombrePropietario" placeholder="Nombre Del Propietario">
+            <input type="text" name="" id="telefono" placeholder="Número De Teléfono">
+            <input type="date" name="" id="fechaCita" placeholder="Decha De La Cita">
+            <input type="time" name="" id="horaCita" placeholder="Hora De La Cita" min="08:00" max="20:00">
+            <select name="" id="tipoMascota">
+                <option value="">Seleccione El Tipo De Mascota</option>
+                <option value="Perro">Perro</option>
+                <option value="Gato">Gato</option>
+                <option value="Conejo">Conejo</option>
+                <option value="Curi">Curi</option>
+                <option value="Loro">Loro</option>
+                <option value="Cabra">Cabra</option>
+                <option value="Canario">Canario</option>
+                <option value="Pony">Pony</option>
+                <option value="Cerdo">Cerdo</option>
+                <option value="Gallina">Gallina</option>
+            </select>
+            <textarea id="sintomasMascota" name="sintomas" rows="5" cols="40" placeholder="Describe los síntomas de la mascota aquí..." maxlength="400"></textarea>
+            <select name="" id="estadoCita">
+                <option value="" disabled selected>Seleccione el estado de la cita</option>
+                <option value="abierta">Abierta</option>
+                <option value="terminada">Terminada</option>
+                <option value="anulada">Anulada</option>
+            </select>
+            <button id="guardarCita">Guardar Cita</button>
+
+            <div id="contenedorMensajeError">
+            <div class="alertContenedor">
+                <p id="textoMensajeError"></p>
+                <button class="alert-button" onclick="cerrarMensajeAlerta('contenedorMensajeError')">Aceptar</button>
+            </div>
+     </div>
+
+    </dialog>
+    </div>
+
+     <div id="contenedorMensajeExito">
+            <div class="alertContenedor">
+                <p id="textoMensajeExito"></p>
+                <button class="alert-button" onclick="cerrarMensajeAlerta('contenedorMensajeExito')">Aceptar</button>
+            </div>
+     </div>
+
+    <div id="contenedorMensajeConfirmacion">
+        <div class="alertContenedor">
+            <p>¿Desea eliminar este registro?</p>
+            <div class="confirm-buttons">
+                <button class="confirm-button" onclick="confirmarEliminacion()">Aceptar</button>
+                <button class="cancel-button" onclick="cerrarMensajeAlerta('contenedorMensajeConfirmacion')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    <div id="veterinaria"></div>
+
+    <script>
+        let datosCita = [];
+        let modo = 0;
+        let citaEditar = null;
+        let indiceAEliminar = -1; 
+        let numeroCita = 0;
+
+
+         function guardarDatosCitaEnLocalStorage() {
+            localStorage.setItem('citasVeterinaria', JSON.stringify(datosCita));
+        }
+
+        function cargarDatosCitaDeLocalStorage() {
+            const citasGuardadas = localStorage.getItem('citasVeterinaria');
+            if (citasGuardadas) {
+                datosCita = JSON.parse(citasGuardadas);
+                if (datosCita.length > 0) {
+                    numeroCita = Math.max(...datosCita.map(cita => cita.numeroC)) + 1;
+                }
+            } else {
+                datosCita = []; 
+            }
+            pintarCitas();
+        }
+
+        const botonMostrarFormulario = document.getElementById("mostrarFormulario");
+        const dialogoAgendarCita = document.getElementById("agendarcita");
+        const cerrarDialogoBoton = document.querySelector(".cerrarDialogo");
+        const contenedorMensajeConfirmacion = document.getElementById("contenedorMensajeConfirmacion");
+        const filtrarEstado = document.getElementById("filtroEstado");
+        const botonBuscarPropietario = document.getElementById("botonBuscarPropietario"); 
+        const buscarPropietario = document.getElementById("buscarPropietario");
+
+        botonMostrarFormulario.addEventListener("click", () => {
+        dialogoAgendarCita.showModal();
+        limpiar(); 
+        modo = 0; 
+        citaEditar = null; 
+        document.getElementById("guardarCita").textContent = "Guardar Cita";
+        });
+
+        cerrarDialogoBoton.addEventListener("click", () => {
+        dialogoAgendarCita.close(); 
+         limpiar();
+        modo = 0;
+        citaEditar = null; 
+        document.getElementById("guardarCita").textContent = "Guardar Cita";
+        limpiar();
+        });
+
+        filtrarEstado.addEventListener("change", () => {
+            pintarCitas(); 
+        });
+
+        botonBuscarPropietario.addEventListener("click", () => {
+            pintarCitas(); 
+        });
+
+        buscarPropietario.addEventListener("input", () => {
+            pintarCitas(); 
+        });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            cargarDatosCitaDeLocalStorage();
+            const fechaActual = new Date(); 
+            let mes = (fechaActual.getMonth() + 1).toString().padStart(2, '0');
+            let dia = fechaActual.getDate().toString().padStart(2, '0');
+            const año = fechaActual.getFullYear();
+            const minFecha = `${año}-${mes}-${dia}`; 
+            document.getElementById('fechaCita').setAttribute('min', minFecha);
+        });
+
+
+        document.getElementById("guardarCita").addEventListener("click", () => {
+            if (modo == 0) {
+                console.log("estoy guardando...");
+
+                guardarCita()
+            } else if (modo == 1) {
+
+                console.log("estoy editando...");
+                editarCita()
+            }
+        })
+
+         function mostrarMensajeAlerta(idContenedorAlerta, mensajeParaMostrar) {
+            const contenedorAlerta = document.getElementById(idContenedorAlerta);
+            const textoAlerta = contenedorAlerta.querySelector('p');
+            textoAlerta.textContent = mensajeParaMostrar;
+            contenedorAlerta.style.display = "flex";
+        }
+
+        function cerrarMensajeAlerta(idContenedorAlerta) {
+            const contenedorAlerta = document.getElementById(idContenedorAlerta);
+            contenedorAlerta.style.display = "none";
+        }
+
+        function guardarCita(){
+            const telefono = document.getElementById("telefono").value.trim();
+             if (document.getElementById("nombreMascota").value == "") {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, digite el nombre de la mascota.");
+                return;
+            } 
+            if (document.getElementById("nombrePropietario").value == "") {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, digite el nombre del propietario.");
+                return;
+            }
+            if (document.getElementById("telefono").value == "") {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, digite el número de teléfono.");
+                return;
+            }
+            if (!/^\d+$/.test(telefono)) {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ El número de teléfono debe contener sólo números.");
+                return;
+            }
+            if (document.getElementById("fechaCita").value == "") {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, digite la fecha de la cita.");
+                return;
+            }
+            if (document.getElementById("horaCita").value == "") {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, digite la hora de la cita.");
+                return;
+            }
+             const horaSeleccionada = parseInt(document.getElementById("horaCita").value.split(':')[0]);
+              if (horaSeleccionada < 8 || horaSeleccionada > 20) {
+                  mostrarMensajeAlerta('contenedorMensajeError', "⚠️ La hora de la cita debe estar entre las 8 a.m. y las 8 p.m.");
+                  return;
+              }
+            if (document.getElementById("tipoMascota").value == "") {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, seleccione el tipo de mascota.");
+                return;
+            }
+            if (document.getElementById("sintomasMascota").value == "") {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, digite los síntomas de la mascota.");
+                return;
+            }
+            if (sintomasMascota.length > 400) {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Los síntomas no deben exceder los 400 caracteres.");
+                return;
+            }
+            if (document.getElementById("estadoCita").value == "") { 
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ Por favor, seleccione el estado de la cita.");
+                return;
+            }
+                numeroCita++;
+                let cita = {
+                    numeroC: numeroCita,
+                     nombreM: document.getElementById("nombreMascota").value,
+                     nombreP: document.getElementById("nombrePropietario").value,
+                     tel: document.getElementById("telefono").value,
+                     fechaC: document.getElementById("fechaCita").value,
+                     horaC: document.getElementById("horaCita").value,
+                     tipoM: document.getElementById("tipoMascota").value,
+                     sintomasM: document.getElementById("sintomasMascota").value,
+                     estadoC: document.getElementById("estadoCita").value,
+                }
+
+                console.log(cita);
+                datosCita.unshift(cita);
+                console.log(datosCita);
+                guardarDatosCitaEnLocalStorage();
+                mostrarMensajeAlerta('contenedorMensajeExito',"✅Registro exitoso")
+                limpiar();
+                dialogoAgendarCita.close();
+                pintarCitas();
+        }
+
+        function limpiar() {
+            document.getElementById("nombreMascota").value = ""
+            document.getElementById("nombrePropietario").value = ""
+            document.getElementById("telefono").value = ""
+            document.getElementById("fechaCita").value = ""
+            document.getElementById("horaCita").value = ""
+            document.getElementById("tipoMascota").value = ""
+            document.getElementById("sintomasMascota").value = ""
+            document.getElementById("estadoCita").value = ""; 
+        }
+
+        function mostrarConfirmacionEliminar(indiceDelRegistro) {
+            indiceAEliminar = indiceDelRegistro; 
+            contenedorMensajeConfirmacion.style.display = "flex"; 
+        }
+
+        function confirmarEliminacion() {
+            if (indiceAEliminar > -1) {
+                datosCita.splice(indiceAEliminar, 1);
+                guardarDatosCitaEnLocalStorage();
+                pintarCitas(); 
+                indiceAEliminar = -1; 
+            }
+            cerrarMensajeAlerta('contenedorMensajeConfirmacion'); 
+        }
+
+        function editarCita() { 
+            const indiceReal = datosCita.findIndex(cita => cita.numeroC === citaEditar);
+
+            if (indiceReal === -1) {
+                console.error("No se encontró la cita para editar con el ID:", citaEditar);
+                return;
+            }
+
+            const horaSeleccionada = parseInt(document.getElementById("horaCita").value.split(':')[0]);
+            if (horaSeleccionada < 8 || horaSeleccionada >= 20) {
+                mostrarMensajeAlerta('contenedorMensajeError', "⚠️ La hora de la cita debe estar entre las 8 a.m. y las 8 p.m.");
+                return;
+            }
+
+            datosCita[indiceReal].nombreM = document.getElementById("nombreMascota").value;
+            datosCita[indiceReal].nombreP = document.getElementById("nombrePropietario").value;
+            datosCita[indiceReal].tel = document.getElementById("telefono").value;
+            datosCita[indiceReal].fechaC = document.getElementById("fechaCita").value;
+            datosCita[indiceReal].horaC = document.getElementById("horaCita").value;
+            datosCita[indiceReal].tipoM = document.getElementById("tipoMascota").value;
+            datosCita[indiceReal].estadoC = document.getElementById("estadoCita").value;
+            datosCita[indiceReal].sintomasM = document.getElementById("sintomasMascota").value;
+
+            guardarDatosCitaEnLocalStorage();
+            pintarCitas();
+            modo = 0; 
+            citaEditar = null; 
+            document.getElementById("guardarCita").textContent = "Guardar Cita";
+            limpiar(); 
+            dialogoAgendarCita.close();
+            mostrarMensajeAlerta('contenedorMensajeExito', "✅Cita editada exitosamente");
+        }
+
+        function pintarCitas(){
+        document.getElementById("veterinaria").textContent = ""
+        const estadoActual = filtrarEstado.value;
+        const textoBusquedaPropietario = buscarPropietario.value.toLowerCase().trim();
+
+        let citasMostradas = datosCita.filter(item => {
+            return estadoActual === "todos" || item.estadoC === estadoActual;
+        });
+
+        if (textoBusquedaPropietario !== "") {
+            citasMostradas = citasMostradas.filter(item => {
+                return item.nombreP.toLowerCase().includes(textoBusquedaPropietario);
+            });
+        }
+
+        if (citasMostradas.length === 0 && (estadoActual !== "todos" || textoBusquedaPropietario !== "")) {
+            mostrarMensajeAlerta('contenedorMensajeError', "⚠️ No se encontraron citas que coincidan con los criterios de búsqueda.");
+        } else {
+            cerrarMensajeAlerta('contenedorMensajeError'); 
+        }
+
+        citasMostradas.forEach((item) => {
+        let divCard = document.createElement("div")
+        divCard.id = "divCard"
+
+        let divTextos = document.createElement("div")
+        divTextos.id = "divTextos"; 
+        divCard.appendChild(divTextos)
+
+        let divImagen = document.createElement("div")
+        let imagen = document.createElement("img")
+        imagen.id = "imagen"
+        imagen.src = `./imgAnimales/${item.tipoM}.png`
+        imagen.alt = item.tipoM
+        imagen.style.width = "293px" 
+        imagen.style.height = "290px"
+        imagen.style.borderTopLeftRadius = "8px" 
+        imagen.style.borderTopRightRadius = "8px"
+        divImagen.style.display = "flex"
+        divImagen.style.justifyContent = "center"
+        divImagen.style.alignItems = "center"
+        divImagen.style.marginBottom = "10px"
+        divImagen.appendChild(imagen)
+        divCard.appendChild(divImagen)
+
+        let numeroCitaSpan = document.createElement("span");
+        numeroCitaSpan.textContent = "Número de Cita: ";
+        let valorNumeroCita = document.createElement("span");
+        valorNumeroCita.textContent = item.numeroC;
+        valorNumeroCita.style.fontWeight = "bold"; 
+        valorNumeroCita.style.fontSize = "1.1em"; 
+        divTextos.appendChild(numeroCitaSpan);
+        divTextos.appendChild(valorNumeroCita);
+        divTextos.appendChild(document.createElement("br"));
+        divTextos.appendChild(document.createElement("br"));
+    
+        let nombreM = document.createElement("span")
+        nombreM.textContent = "Nombre De La Mascota: "
+        let nomM = document.createElement("span")
+        nomM.textContent = item.nombreM
+        divTextos.appendChild(nombreM)
+        divTextos.appendChild(nomM)
+        divTextos.appendChild(document.createElement("br"))
+
+        let nombreProp = document.createElement("span")
+        nombreProp.textContent = "Nombre Del Propietario: "
+        let nomP = document.createElement("span")
+        nomP.textContent = item.nombreP
+        divTextos.appendChild(nombreProp)
+        divTextos.appendChild(nomP)
+        divTextos.appendChild(document.createElement("br"))
+
+        let numTel = document.createElement("span")
+        numTel.textContent = "Teléfono: "
+        let telef = document.createElement("span")
+        telef.textContent = item.tel
+        divTextos.appendChild(numTel)
+        divTextos.appendChild(telef)
+        divTextos.appendChild(document.createElement("br"))
+
+        let fecha = document.createElement("span")
+        fecha.textContent = "Fecha De La Cita: "
+        let fechaValor = document.createElement("span")
+        fechaValor.textContent = item.fechaC
+        divTextos.appendChild(fecha)
+        divTextos.appendChild(fechaValor)
+        divTextos.appendChild(document.createElement("br"))
+
+        let hora = document.createElement("span")
+        hora.textContent = "Hora De La Cita: "
+        let horaValor = document.createElement("span")
+        horaValor.textContent = item.horaC
+        divTextos.appendChild(hora)
+        divTextos.appendChild(horaValor)
+        divTextos.appendChild(document.createElement("br"))
+
+        let tipo = document.createElement("span")
+        tipo.textContent = "Tipo De Mascota: "
+        let tipoValor = document.createElement("span")
+        tipoValor.textContent = item.tipoM
+        divTextos.appendChild(tipo)
+        divTextos.appendChild(tipoValor)
+        divTextos.appendChild(document.createElement("br"))
+
+        let sintomas = document.createElement("span")
+        sintomas.textContent = "Síntomas: "
+        let sintomasValor = document.createElement("span")
+        sintomasValor.textContent = item.sintomasM
+        divTextos.appendChild(sintomas)
+        divTextos.appendChild(sintomasValor)
+        divTextos.appendChild(document.createElement("br"))
+
+        let estado = document.createElement("span");
+        estado.textContent = "Estado de la Cita: ";
+        let valorEstado = document.createElement("span");
+        valorEstado.textContent = item.estadoC;
+        divTextos.appendChild(estado);
+        divTextos.appendChild(valorEstado);
+        divTextos.appendChild(document.createElement("br"));
+
+        divCard.appendChild(divTextos)
+        document.getElementById("veterinaria").appendChild(divCard)
+
+        let divBotones = document.createElement("div");
+        divBotones.style.marginTop = "10px";
+        divBotones.style.display = "flex";
+        divBotones.style.gap = "10px";
+        divBotones.style.justifyContent = "center";
+
+        let editar = document.createElement("button")
+        editar.textContent = "✍️"
+        editar.addEventListener("click", () => {
+            document.getElementById("nombreMascota").value = item.nombreM
+            document.getElementById("nombrePropietario").value = item.nombreP
+            document.getElementById("telefono").value = item.tel
+            document.getElementById("fechaCita").value = item.fechaC
+            document.getElementById("horaCita").value = item.horaC
+            document.getElementById("tipoMascota").value = item.tipoM
+            document.getElementById("sintomasMascota").value = item.sintomasM
+            document.getElementById("estadoCita").value = item.estadoC;
+            document.getElementById("guardarCita").textContent = "Editar Cita"
+            modo = 1
+            citaEditar = item.numeroC; 
+            dialogoAgendarCita.showModal();
+        })
+
+       let eliminar = document.createElement("button");
+        eliminar.textContent = "❌";
+         eliminar.addEventListener("click", () => {
+             const indiceRealParaEliminar = datosCita.findIndex(cita => cita.numeroC === item.numeroC);
+             mostrarConfirmacionEliminar(indiceRealParaEliminar); 
+            });
+
+            divBotones.appendChild(editar)
+            divBotones.appendChild(eliminar)
+            divCard.appendChild(divBotones)
+        });
+    }
+    </script>
+
+    <style>
+
+        .container{
+            background-color: #f0f2f5;
+            min-height: 100vh; 
+            padding-bottom: 20px;
+        }
+
+        .cuadro1 {
+            width: 100%; 
+            height: 120px; 
+            background-color:#65b0ff;
+            border: 1px solid rgb(0, 0, 0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
+        }
+
+        .cuadro1 h1{
+            font-size: 45px;
+            font-family:'Times New Roman', Times, serif;
+        }
+
+        .cuadro1 h2{
+            margin-top: -30px;
+            font-size: 25px;
+        }
+
+        .imagenIzquierda img{
+            width: 110px;
+            height: 109px;
+            position: absolute;
+            top: 9%; 
+            left: 16%;
+        }
+
+        .imagenDerecha img{
+            width: 110px;
+            height: 109px;
+            position: absolute;
+            top: 9%; 
+            left: 75%;
+        }
+
+         #contenedorMensajeError {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2147483647;
+        }
+
+        #contenedorMensajeError .alertContenedor {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            min-width: 300px;
+            color: rgb(0, 0, 0);
+            font-weight: bold;
+        }
+
+        #contenedorMensajeError .alert-button {
+            background-color: #dc3545;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        #contenedorMensajeExito {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2147483647;
+        }
+
+        #contenedorMensajeExito .alertContenedor {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            min-width: 300px;
+            color: green;
+            font-weight: bold;
+        }
+
+        #contenedorMensajeExito .alert-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+         
+        .contenedorCuestionario{
+            background-color: rgb(192, 211, 219);
+            border-radius: 8px;
+            width: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            gap: 15px;
+        }
+
+        .contenedorCuestionario h1{
+            font-size: 40px;
+            font-family: serif;
+            color: rgb(0, 0, 0);
+            margin: 0;
+            padding-top: 10px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        select {
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        #guardarCita{
+            width: 80%;
+            padding: 10px;
+            border: 1px solid #000000;
+            background-color: #398fff;
+            border-radius: 4px;
+            color: black;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+        
+        #mostrarFormulario{
+            margin-left: 1200px;
+            margin-top: 10px;
+        }
+
+        dialog {
+            border: none; 
+            padding: 0; 
+            border-radius: 10px; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
+            max-width: 90%;
+        }
+
+        dialog::backdrop {
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 99;
+        }
+
+        .cerrarDialogo {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        .cerrarDialogo:hover,
+        .cerrarDialogo:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #divCard {
+            border: 2px solid gray;
+            border-radius: 8px;
+            box-shadow: 3px 3px 3px gray;
+            background-color: #e2e7ff;
+            margin-top: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+            padding: 0px 15px;
+            transition: transform 0.2s ease-in-out;
+            min-height: 500px; 
+        }
+
+        #divCard:hover {
+            transform: translateY(-8px); 
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); 
+            background-color: #f9f9ff; 
+        }
+
+        #divCard #divTextos {
+            line-height: 1.6; 
+            text-align: left; 
+            width: 100%; 
+        }
+
+        #veterinaria {
+            display: grid;
+            grid-template-columns: repeat(4, 300px);
+            gap: 20px;
+            justify-content: center;
+            background-color: #f0f2f5;
+        }
+
+        #contenedorMensajeConfirmacion {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 999999; 
+        }
+
+        #contenedorMensajeConfirmacion .alertContenedor {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            min-width: 300px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        #contenedorMensajeConfirmacion .confirm-buttons {
+            margin-top: 15px;
+            display: flex; 
+            flex-direction: row-reverse; 
+            justify-content: flex-end; 
+        }
+
+        #contenedorMensajeConfirmacion .confirm-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px; 
+            font-weight: normal;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0px 20px;
+        }
+
+        #contenedorMensajeConfirmacion .cancel-button {
+            background-color: #909091;
+            margin-left: 70px;
+        }
+
+        #contenedorMensajeConfirmacion .confirm-button:hover {
+            background-color: #28a745;
+        }
+
+        #contenedorMensajeConfirmacion .cancel-button:hover {
+            background-color: #545b62;
+        }
+
+        .contenedorFiltroBusqueda{
+            display: flex; 
+            align-items: flex-end; 
+            gap: 15px; 
+            margin-top: -40px; 
+            margin-left: 20px;
+            flex-wrap: wrap; 
+        }
+
+        .contenedorFiltrado {
+            position: relative;
+            border: 2px solid #4e4d4d;
+            border-radius: 4px;
+            padding: 12px 10px 5px 10px;
+            width: 250px;
+            background-color: white;
+            margin-top: 0; 
+            margin-left: 0;
+            box-sizing: border-box; 
+        }
+
+        .contenedorFiltrado label {
+            position: absolute; 
+            top: -10px; 
+            left: 10px; 
+            background-color: white; 
+            padding: 0 5px; 
+            font-size: 14px;
+            color: #000000; 
+        }
+
+        .contenedorFiltrado select {
+            border: none; 
+            padding: 0; 
+            width: 100%; 
+            box-shadow: none;
+        }
+
+        .contenedorFiltrado select:focus {
+            border-color: #202122; 
+            box-shadow: 0 0 0 3px rgba(49, 50, 51, 0.2); 
+        }
+
+        .btnBuscarPropietario {
+            margin-left: 0; 
+            padding-top: 0;
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+        }
+
+        #buscarPropietario {
+            padding: 10px 12px; 
+            border: 2px solid #444141; 
+            border-radius: 4px;
+            font-size: 15px;
+            color: #333;
+            outline: none;
+            width: 260px; 
+            box-sizing: border-box;
+        }
+
+        #buscarPropietario::placeholder {
+            color: #999;
+        }
+
+        #botonBuscarPropietario {
+            padding: 10px 15px; 
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+            border: 2px solid #353434; 
+        }
+
+        #botonBuscarPropietario:hover {
+            background-color: #0056b3;
+        }
+    
+        #divCard button { 
+            padding: 10px 18px; 
+            font-size: 20px; 
+            border: none;
+            border-radius: 50%; 
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 45px; 
+            height: 45px;
+        }
+
+        /* 1440px */
+    @media (max-width: 1440px) {
+       #veterinaria{
+        margin-top: -260px;
+       }
+    }
+
+    /* 1024px */
+    @media (max-width: 1024px) {
+        .imagenIzquierda img{
+            left: 5%;
+        }
+        .imagenDerecha img{
+            left: 83%;
+        }
+        #mostrarFormulario {
+            max-width: 280px;
+            margin-left: 850px;
+        }
+        #veterinaria{
+            grid-template-columns: repeat(3, 300px);
+            gap: 18px;
+            margin-top: -230px;
+        }
+    }
+
+    /* 768px */
+    @media (max-width: 768px) {
+        .cuadro1 h1 {
+            font-size: 30px;
+        }
+        .cuadro1 h2 {
+            font-size: 25px;
+        }
+        .imagenDerecha img {
+            left: 79%;
+        }
+        #mostrarFormulario {
+            margin-left: 600px;
+        }
+        #botonBuscarPropietario{
+            display: none;
+        }
+        #veterinaria{
+            grid-template-columns: repeat(2, 300px);
+        }
+    }
+
+    /* 425px */
+    @media (max-width: 425px) {
+        .cuadro1{
+            height: 80px;
+        }
+        .cuadro1 h2 {
+            font-size: 20px;
+        }
+        #mostrarFormulario {
+            font-size: 10px;
+            margin-left: 280px;
+        }
+        #veterinaria{
+            grid-template-columns: repeat(1, 300px);
+        }
+        .imagenDerecha,
+        .imagenIzquierda{
+            display: none;
+        }
+        .contenedorFiltrado {
+            padding: 15px 10px 5px 10px;
+            width: 200px;
+            margin-left: -17px;
+        }
+        #buscarPropietario {
+            width: 400px;
+            margin-left:-17px;
+            margin-top: -5px;
+        }
+        .contenedorCuestionario{
+            width: 350px;
+        }
+        .contenedorCuestionario h1{
+            font-size: 30px;
+        }
+        textarea {
+            width: 80%;
+        }
+        }
+
+    /* 375px */
+    @media (max-width: 375px) {
+         #mostrarFormulario {
+            margin-left: 230px;
+        }
+        #veterinaria{
+            grid-template-columns: repeat(1, 300px);
+        }
+        #buscarPropietario {
+            width: 350px;
+        }
+        .contenedorCuestionario{
+            width: 330px;
+        }
+        textarea {
+            width: 78%;
+        }
+    }
+    /* 320px */
+    @media (max-width: 320px) {
+        .cuadro1 h1{
+            font-size: 25px;
+        }
+        .cuadro1 h2 {
+            font-size: 20px;
+            margin-top: -5px;
+        }
+        #mostrarFormulario {
+            font-size: 10px;
+            margin-left: 180px;
+        }
+        .contenedorFiltrado {
+            width: 150px;
+        }
+        #buscarPropietario {
+            width: 300px;
+            margin-left:-17px;
+            margin-top: -5px;
+        }
+        #veterinaria{
+            grid-template-columns: repeat(1, 270px);
+        }
+         .contenedorCuestionario{
+            width: 280px;
+        }
+        .contenedorCuestionario h1{
+            font-size: 26px;
+        }
+    }
+
+    </style>
+</body>
+</html>
