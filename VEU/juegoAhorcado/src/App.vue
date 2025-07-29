@@ -6,13 +6,11 @@
     <div class="secciones_inicio">
       <template v-if="!usuarioAutenticado">
         <div class="login">
+        <h2>Iniciar o Registrarse</h2>
           <div class="inputs_login">
-            <div>
-
-            </div>
             <input type="text" id="nombreUsuario" v-model="nombreUsuarioInicio"
               placeholder="Ingrese su nombre de usuario">
-            <input type="password" id="contrasena" v-model="contrasenaInicio" placeholder="Ingrese su contraseña">
+            <input type="password" id="contrasena" v-model="contrasenaInicio" placeholder="Ingrese su contraseña"autocomplete="current-password">
           </div>
           <div class="btn_login">
             <button @click="iniciarSesion">Iniciar Sesión</button>
@@ -20,12 +18,13 @@
           </div>
         </div>
       </template>
-
-      <div>
-        <!-- <img src="https://icons8.com/icon/6TeXUFKAp4zb/squiggly-arrow"> -->
-        <button @click="pagina = 'dificultad'">Volver a Dificultad</button>
-        <button class="btn_inicio" @click="pagina = 'dificultad'">Empezar</button>
-      </div>
+      <template v-else>
+          <div class="informacionDelUsuario">
+            <h2 style="color: bisque;">¡Hola, {{ nombreUsuario }}!</h2>
+            <button class="btn_inicio" @click="pagina = 'dificultad'">Empezar a Jugar</button>
+            <button class="btn_logout" @click="cerrarSesion">Cerrar Sesión</button>
+          </div>
+        </template>
 
       <div class="seleccion_personaje">
         <p>aqui va el personaje</p>
@@ -33,7 +32,7 @@
     </div>
   </section>
 
-  <section v-show="pagina === 'dificultad'" class="dificultad">
+  <section v-show="pagina === 'dificultad' && usuarioAutenticado" class="dificultad">
     <div class="opciones">
       <button @click="seleccionarNivel('facil')">Fácil</button>
       <button @click="seleccionarNivel('medio')">Medio</button>
@@ -55,17 +54,57 @@
   </section>
 
   <section v-show="pagina === 'juego'" class="juego">
-    <h2>{{ lineas }}</h2>
+    <p :class="['mensaje', { 'ganado': estadoJuego === 'ganado', 'perdido': estadoJuego === 'perdido' }]">{{ mensajeJuego }}</p>
+
+    <div class="areaDeJuego">
+        <div class="dibujo">
+          <div v-if="erroresCometidos >= 1" class="horca"></div>
+          <div v-if="erroresCometidos >= 2" class="soga"></div>
+          <div v-if="erroresCometidos >= 3" class="cabeza"></div>
+          <div v-if="erroresCometidos >= 4" class="baseCuerpo"></div>
+          <div v-if="erroresCometidos >= 5" class="brazoDerecho"></div>
+          <div v-if="erroresCometidos >= 6" class="brazoIzquierdo"></div>
+          <div v-if="erroresCometidos >= 7" class="piernaDerecha"></div>
+          <div v-if="erroresCometidos >= 8" class="piernaIzquierda"></div>
+        </div>
+
+        <h2 class="mostrar-palabra">{{ palabraMostrada.split('').join(' ') }}</h2>
+
+        <p class="letras-usadas">
+          Letras usadas:
+          <span v-for="(letra, indice) in letrasIntentadas" :key="indice"
+                :class="{ 'correcta': palabraSecreta.includes(letra), 'incorrecta': !palabraSecreta.includes(letra) }">
+            {{ letra }}{{ indice < letrasIntentadas.length - 1 ? ', ' : '' }}
+          </span>
+        </p>
+
+        <div class="seccion-estadisticas">
+        <h2>Historial de Partidas de {{ nombreUsuario }}</h2>
+        <p v-if="historialPartidas.length === 0">Aún no hay partidas registradas para este usuario.</p>
+        <ul>
+          <li v-for="(registro, indice) in historialPartidas" :key="indice" :class="{ 'registro-ganado': registro.resultado === 'ganado', 'registro-perdido': registro.resultado === 'perdido' }">
+            <span>{{ registro.resultado === 'ganado' ? '🎉 Victoria' : '😞 Derrota' }}</span>
+            <span>Categoría: {{ registro.categoria }}</span>
+            <span>Nivel: {{ registro.nivel }}</span>
+            <span>Palabra: {{ registro.palabra }}</span>
+            <span>Errores: {{ registro.errores }}</span>
+            <span>Fecha: {{ new Date(registro.fecha).toLocaleDateString('es-CO') }}</span>
+          </li>
+        </ul>
+        <button v-if="historialPartidas.length > 0" @click="limpiarHistorial">Limpiar Historial</button>
+      </div>
+      </div>
+    <!--<h2>{{ lineas }}</h2>
     <div>
       <button v-for="letra in 'abcdefghijklmnopqrstuvwxyz'" :key="letra" @click="adivinarLetra(letra)">
         {{ letra }}
       </button>
-    </div>
+    </div>-->
   </section>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed,  watch, onMounted } from 'vue';
 
 const pagina = ref('inicio');
 
